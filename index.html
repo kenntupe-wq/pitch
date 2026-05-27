@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Alder Security</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00ff88;
+    --green-dim: #00c860;
+    --red: #ff3344;
+    --amber: #ffaa00;
+    --dark: #080c0a;
+    --dark2: #0d1410;
+    --dark3: #111a14;
+    --panel: rgba(0,255,136,0.04);
+    --border: rgba(0,255,136,0.12);
+    --text: #c8e8d4;
+    --text-dim: #5a7a66;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--dark);
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text);
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ── SLIDE SYSTEM ── */
+  #slides { width: 100%; height: 100%; position: relative; }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.4,0,.2,1);
+    transform: translateX(40px);
+  }
+  .slide.active {
+    opacity: 1; pointer-events: all;
+    transform: translateX(0);
+  }
+  .slide.exit {
+    opacity: 0; transform: translateX(-40px);
+  }
+
+  /* ── GLOBAL NAV ── */
+  #nav {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 100;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--text-dim); transition: all 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--green); box-shadow: 0 0 8px var(--green); width: 24px; border-radius: 4px; }
+
+  #tap-hint {
+    position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--text-dim);
+    letter-spacing: 2px; text-transform: uppercase;
+    animation: blink 2s ease infinite;
+    pointer-events: none; z-index: 100;
+  }
+  @keyframes blink { 0%,100%{opacity:.3} 50%{opacity:.8} }
+
+  #tap-left, #tap-right {
+    position: fixed; top: 0; width: 30%; height: 100%;
+    z-index: 50; cursor: pointer;
+  }
+  #tap-left { left: 0; }
+  #tap-right { right: 0; }
+
+  .scanline {
+    position: absolute; inset: 0; pointer-events: none; z-index: 10; overflow: hidden;
+  }
+  .scanline::after {
+    content:''; position: absolute; left:0; right:0; top:-100%;
+    height: 40%; background: linear-gradient(transparent, rgba(0,255,136,0.02), transparent);
+    animation: scan 6s linear infinite;
+  }
+  @keyframes scan { to { top: 200%; } }
+
+  /* ── TOP CONTROLS ── */
+  #clock { position: fixed; top: 20px; left: 20px; z-index: 200; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); }
+  
+  #edit-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 200;
+    background: rgba(0,0,0,.6); border: 1px solid var(--border);
+    color: var(--text-dim); border-radius: 50%;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px;
+    transition: all 0.2s;
+  }
+  #edit-btn.active { border-color: var(--amber); color: var(--amber); box-shadow: 0 0 10px rgba(255,170,0,0.3); }
+
+  /* ── EDIT MODE STYLES ── */
+  body.edit-mode .editable {
+    position: relative;
+    cursor: pointer;
+  }
+  body.edit-mode .editable::after {
+    content: '+ TAP TO CHANGE';
+    position: absolute; inset: 0;
+    background: rgba(255,170,0,0.2);
+    border: 2px dashed var(--amber);
+    color: var(--amber);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace; font-size: 12px; font-weight: bold;
+    opacity: 0; transition: opacity 0.2s;
+    border-radius: inherit; z-index: 20;
+  }
+  body.edit-mode .editable:hover::after { opacity: 1; }
+  
+  /* Fallback empty states */
+  .media-slot { width: 100%; height: 100%; object-fit: contain; background: rgba(0,0,0,0.3); display: block; }
+  .cam-feed .media-slot { object-fit: cover; }
+
+  /* ── SLIDE 1: HERO ── */
+  #s1 { background: var(--dark); justify-content: center; align-items: center; }
+  #s1 .bg-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  #s1 .hero-content { position: relative; z-index: 2; text-align: center; }
+  #s1 .shield { width: 80px; height: 80px; margin: 0 auto 20px; filter: drop-shadow(0 0 20px var(--green)); }
+  #s1 h1 { font-family: 'Bebas Neue', sans-serif; font-size: 80px; letter-spacing: 10px; color: #fff; line-height: 1; }
+  #s1 .tagline { font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 4px; color: var(--green); margin-top: 12px; }
+  
+  .status-bar { margin-top: 40px; display: flex; gap: 24px; justify-content: center; }
+  .stat-pill { display: flex; flex-direction: column; align-items: center; background: rgba(0,0,0,0.4); padding: 8px 16px; border-radius: 4px; border: 1px solid var(--border); }
+  .stat-pill .num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--green); line-height: 1; }
+  .stat-pill .lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+
+  /* ── SLIDE 2: HARDWARE ECOSYSTEM ── */
+  #s2 { background: #050806; padding: 20px 24px 70px; }
+  .ecosystem-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 12px; width: 100%; height: 100%;
+  }
+  .eco-card {
+    background: #0b100d; border: 1px solid rgba(255,255,255,0.03); border-radius: 12px;
+    position: relative; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
+  }
+  .eco-card .img-wrapper { height: 70%; position: relative; border-radius: 8px; }
+  .eco-title { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.8); letter-spacing: 1px; text-transform: uppercase; }
+  .eco-badge { position: absolute; top: 14px; right: 14px; font-size: 9px; font-family: 'Share Tech Mono', monospace; background: rgba(0,255,136,0.1); color: var(--green); padding: 2px 6px; border-radius: 3px; }
+
+  /* Center App Block */
+  .eco-center-app {
+    grid-column: 2 / 4; grid-row: 1 / 4;
+    background: linear-gradient(145deg, #0d1611, #060a07); border: 1px solid var(--border);
+    box-shadow: inset 0 0 20px rgba(0,255,136,0.05);
+    display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 20px; border-radius: 12px;
+  }
+  .mock-phone {
+    width: 150px; height: 280px; background: #101914; border: 4px solid #1a2920; border-radius: 24px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .phone-btn {
+    width: 70px; height: 70px; border-radius: 50%; background: var(--green); box-shadow: 0 0 20px rgba(0,255,136,0.3);
+    display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; font-size: 12px; cursor: pointer; transition: all 0.2s;
+  }
+  .phone-status { margin-top: 16px; font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 2px; color: var(--green); }
+  .app-actions { display: flex; gap: 8px; width: 100%; justify-content: center; }
+  .action-pill { background: rgba(255,255,255,0.04); padding: 6px 12px; border-radius: 6px; font-size: 10px; font-family: 'Share Tech Mono', monospace; color: var(--text-dim); }
+  .action-pill.active { color: var(--green); border: 1px solid rgba(0,255,136,0.2); background: rgba(0,255,136,0.02); }
+
+  /* ── SLIDE 3: LIVE CAMERAS ── */
+  #s3 { background: #060a07; padding: 20px 24px 70px; }
+  .cam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; height: 100%; }
+  .cam-feed {
+    border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
+    position: relative; background: #000;
+  }
+  .cam-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; pointer-events: none; z-index: 5;}
+  .cam-top { display: flex; justify-content: space-between; }
+  .cam-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #fff; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 2px; }
+  .cam-live { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--red); background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 2px; }
+  .cam-time { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.6); background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 2px; }
+
+  /* ── SLIDE 4: YARD SIGN ── */
+  #s4 { background: var(--dark2); justify-content: center; align-items: center; }
+  .yard-sign-container { text-align: center; }
+  .yard-sign-wrapper { width: 260px; height: 260px; margin: 0 auto 20px; border-radius: 12px; }
+  .sign-caption { font-size: 16px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; font-family: 'Share Tech Mono', monospace; }
+  .sign-caption span { color: var(--green); }
+
+  /* ── SLIDE 5: WHY ALDER ── */
+  #s5 { background: var(--dark); padding: 40px 40px 70px; justify-content: center; }
+  #s5 h2 { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 4px; color: #fff; }
+  #s5 .sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--green); letter-spacing: 2px; margin-bottom: 24px; }
+  .feature-list { display: flex; flex-direction: column; gap: 12px; }
+  .feature-item { display: flex; gap: 16px; padding: 14px; border-radius: 8px; background: rgba(0,255,136,0.02); border: 1px solid var(--border); }
+  .feature-text h3 { font-size: 16px; color: #fff; margin-bottom: 2px; }
+  .feature-text p { font-size: 13px; color: var(--text-dim); line-height: 1.4; }
+
+  /* ── SLIDE 6: CLOSER ── */
+  #s6 { background: var(--dark); justify-content: center; align-items: center; }
+  .closer-content { text-align: center; padding: 0 40px; }
+  .closer-content .headline { font-family: 'Bebas Neue', sans-serif; font-size: 60px; color: #fff; line-height: 1; margin-bottom: 12px; }
+  .closer-content .headline span { color: var(--green); text-shadow: 0 0 20px var(--green); }
+  .closer-content .body-copy { font-size: 15px; color: var(--text-dim); line-height: 1.6; margin-bottom: 32px; max-width: 360px; }
+  .cta-btn { background: var(--green); color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; padding: 14px 40px; border-radius: 4px; border: none; cursor: pointer; box-shadow: 0 0 30px rgba(0,255,136,0.3); }
+  .guarantee { margin-top: 24px; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+
+</style>
+</head>
+<body>
+
+<div id="clock"></div>
+<div id="edit-btn" onclick="toggleEditMode()">⚙️</div>
+
+<div id="tap-left" onclick="prevSlide()"></div>
+<div id="tap-right" onclick="nextSlide()"></div>
+
+<!-- Hidden File Input -->
+<input type="file" id="media-upload" accept="image/*,video/*" style="display:none;">
+
+<div id="slides">
+
+  <!-- SLIDE 1: HERO -->
+  <div class="slide active" id="s1">
+    <div class="bg-grid"></div>
+    <div class="scanline"></div>
+    <div class="hero-content">
+      <div class="shield">
+        <svg viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 4L8 18V44C8 62 22 78 40 86C58 78 72 62 72 44V18L40 4Z" fill="rgba(0,255,136,0.1)" stroke="#00ff88" stroke-width="1.5"/>
+          <path d="M30 44L37 51L52 36" stroke="#00ff88" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1>ALDER</h1>
+      <div class="tagline">// RESIDENTIAL SECURITY ECOSYSTEM //</div>
+      <div class="status-bar">
+        <div class="stat-pill"><div class="num">24/7</div><div class="lbl">Monitoring</div></div>
+        <div class="stat-pill"><div class="num">60s</div><div class="lbl">Response</div></div>
+        <div class="stat-pill"><div class="num">HD</div><div class="lbl">Cameras</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: HARDWARE ECOSYSTEM -->
+  <div class="slide" id="s2">
+    <div class="ecosystem-grid">
+      
+      <div class="eco-card">
+        <div class="eco-title">Outdoor Cam</div>
+        <div class="img-wrapper editable" data-key="outdoor_cam">
+          <img class="media-slot" id="img-outdoor_cam" src="" alt=" ">
+        </div>
+        <div class="eco-badge">PRO</div>
+      </div>
+      
+      <div class="eco-card">
+        <div class="eco-title">Indoor Cam</div>
+        <div class="img-wrapper editable" data-key="indoor_cam">
+          <img class="media-slot" id="img-indoor_cam" src="" alt=" ">
+        </div>
+      </div>
+
+      <div class="eco-center-app">
+        <div class="eco-title">// SYSTEM CONTROL</div>
+        <div class="mock-phone">
+          <div class="phone-btn" id="lock-btn" onclick="toggleSystem()">SECURE</div>
+          <div class="phone-status" id="system-status">SYSTEM ARMED</div>
+        </div>
+        <div class="app-actions">
+          <div class="action-pill active">ALARM</div>
+          <div class="action-pill active">FIRE</div>
+          <div class="action-pill">SMART TRASH</div>
+        </div>
+      </div>
+
+      <div class="eco-card">
+        <div class="eco-title">Doorbell Cam</div>
+        <div class="img-wrapper editable" data-key="doorbell_cam">
+          <img class="media-slot" id="img-doorbell_cam" src="" alt=" ">
+        </div>
+        <div class="eco-badge">HD</div>
+      </div>
+
+      <div class="eco-card">
+        <div class="eco-title">Smart Hub</div>
+        <div class="img-wrapper editable" data-key="smart_hub">
+          <img class="media-slot" id="img-smart_hub" src="" alt=" ">
+        </div>
+      </div>
+
+      <div class="eco-card" style="grid-column: 1;">
+        <div class="eco-title">Door Sensors</div>
+        <div class="img-wrapper editable" data-key="door_sensor">
+          <img class="media-slot" id="img-door_sensor" src="" alt=" ">
+        </div>
+      </div>
+
+      <div class="eco-card" style="grid-column: 4;">
+        <div class="eco-title">Motion Det.</div>
+        <div class="img-wrapper editable" data-key="motion_sensor">
+          <img class="media-slot" id="img-motion_sensor" src="" alt=" ">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SLIDE 3: LIVE CAMERAS -->
+  <div class="slide" id="s3">
+    <div class="cam-grid">
+      <div class="cam-feed editable" data-key="cam_front">
+        <video class="media-slot" id="vid-cam_front" autoplay loop muted playsinline></video>
+        <div class="cam-overlay">
+          <div class="cam-top"><div class="cam-label">FRONT DOOR</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-time ct1"></div>
+        </div>
+      </div>
+      <div class="cam-feed editable" data-key="cam_driveway">
+        <video class="media-slot" id="vid-cam_driveway" autoplay loop muted playsinline></video>
+        <div class="cam-overlay">
+          <div class="cam-top"><div class="cam-label">DRIVEWAY</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-time ct1"></div>
+        </div>
+      </div>
+      <div class="cam-feed editable" data-key="cam_backyard">
+        <video class="media-slot" id="vid-cam_backyard" autoplay loop muted playsinline></video>
+        <div class="cam-overlay">
+          <div class="cam-top"><div class="cam-label">BACKYARD</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-time ct1"></div>
+        </div>
+      </div>
+      <div class="cam-feed editable" data-key="cam_garage">
+        <video class="media-slot" id="vid-cam_garage" autoplay loop muted playsinline></video>
+        <div class="cam-overlay">
+          <div class="cam-top"><div class="cam-label">GARAGE</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-time ct1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: YARD SIGN -->
+  <div class="slide" id="s4">
+    <div class="yard-sign-container">
+      <div class="yard-sign-wrapper editable" data-key="yard_sign">
+        <img class="media-slot" id="img-yard_sign" src="" alt=" " style="filter: drop-shadow(0 0 40px rgba(0,255,136,0.15));">
+      </div>
+      <div class="sign-caption">Every home we protect gets a<br><span>visible deterrent</span> at the curb</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 & 6 Remain Unchanged from previous... -->
+  <div class="slide" id="s5">
+    <h2>WHY ALDER</h2>
+    <div class="sub">// What you get on day one //</div>
+    <div class="feature-list">
+      <div class="feature-item"><div class="feature-text"><h3>HD Indoor & Outdoor Cameras</h3><p>Crystal clear footage day and night. Motion-triggered alerts straight to your phone.</p></div></div>
+      <div class="feature-item"><div class="feature-text"><h3>Professional 24/7 Monitoring</h3><p>Live agents watching your home around the clock. Average response under 60 seconds.</p></div></div>
+      <div class="feature-item"><div class="feature-text"><h3>Smash & Crash Protected</h3><p>Even if someone destroys the panel — the signal already went out. You're covered.</p></div></div>
+    </div>
+  </div>
+
+  <div class="slide" id="s6">
+    <div class="closer-content">
+      <div class="headline">YOUR HOME<br><span>DESERVES THIS.</span></div>
+      <p class="body-copy">One system. One sign. One call — and you're protected tonight.</p>
+      <button class="cta-btn" onclick="alert('Let\'s lock it in.')">GET PROTECTED TODAY</button>
+      <div class="guarantee">✓ No credit check &nbsp;·&nbsp; ✓ Easy approval &nbsp;·&nbsp; ✓ Same-day install</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="nav">
+  <div class="dot active" onclick="goTo(0)"></div>
+  <div class="dot" onclick="goTo(1)"></div>
+  <div class="dot" onclick="goTo(2)"></div>
+  <div class="dot" onclick="goTo(3)"></div>
+  <div class="dot" onclick="goTo(4)"></div>
+  <div class="dot" onclick="goTo(5)"></div>
+</div>
+<div id="tap-hint">TAP TO ADVANCE</div>
+
+<script>
+// ── INDEXED DB FOR LARGE MEDIA FILES ──
+const dbName = "AlderMediaVault";
+let db;
+
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(dbName, 1);
+    req.onupgradeneeded = e => {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains("media")) {
+        db.createObjectStore("media");
+      }
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(); };
+    req.onerror = e => reject("IndexedDB error");
+  });
+}
+
+function saveMediaBlob(key, blob) {
+  const tx = db.transaction("media", "readwrite");
+  tx.objectStore("media").put(blob, key);
+}
+
+function getMediaBlob(key) {
+  return new Promise(resolve => {
+    const tx = db.transaction("media", "readonly");
+    const req = tx.objectStore("media").get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => resolve(null);
+  });
+}
+
+// ── EDIT MODE & UPLOAD LOGIC ──
+let editMode = false;
+let currentEditKey = null;
+const fileInput = document.getElementById('media-upload');
+
+function toggleEditMode() {
+  editMode = !editMode;
+  const btn = document.getElementById('edit-btn');
+  if(editMode) {
+    document.body.classList.add('edit-mode');
+    btn.classList.add('active');
+  } else {
+    document.body.classList.remove('edit-mode');
+    btn.classList.remove('active');
+  }
+}
+
+// Bind click to editables
+document.querySelectorAll('.editable').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if (!editMode) return; // Ignore if not in edit mode
+    currentEditKey = el.getAttribute('data-key');
+    fileInput.click();
+  });
+});
+
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file || !currentEditKey) return;
+  
+  // Save to Database
+  saveMediaBlob(currentEditKey, file);
+  
+  // Update DOM immediately
+  renderMedia(currentEditKey, file);
+  
+  // Reset input
+  fileInput.value = '';
+});
+
+function renderMedia(key, fileBlob) {
+  const url = URL.createObjectURL(fileBlob);
+  const imgEl = document.getElementById('img-' + key);
+  const vidEl = document.getElementById('vid-' + key);
+  
+  if(imgEl) {
+    if(fileBlob.type.startsWith('video/')) {
+      // User uploaded video where image expected, alert them
+      alert("Please select an image for this slot.");
+      return;
+    }
+    imgEl.src = url;
+    imgEl.style.background = 'transparent';
+  }
+  
+  if(vidEl) {
+    if(fileBlob.type.startsWith('image/')) {
+      alert("Please select a video for the camera feeds for best results.");
+      // optionally allow images by swapping tags, but keeping it simple:
+    }
+    vidEl.src = url;
+    vidEl.style.background = 'transparent';
+  }
+}
+
+// On Load: Fetch all saved media and render
+window.addEventListener('DOMContentLoaded', async () => {
+  await initDB();
+  const keys = ['outdoor_cam', 'indoor_cam', 'doorbell_cam', 'smart_hub', 'door_sensor', 'motion_sensor', 'cam_front', 'cam_driveway', 'cam_backyard', 'cam_garage', 'yard_sign'];
+  
+  for(let key of keys) {
+    const blob = await getMediaBlob(key);
+    if(blob) renderMedia(key, blob);
+  }
+});
+
+// ── SLIDER & UI LOGIC ──
+let current = 0;
+const total = 6;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  setTimeout(() => slides[current].classList.remove('exit'), 500);
+  dots[current].classList.remove('active');
+  current = n;
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
+}
+function nextSlide() { if(!editMode) goTo((current + 1) % total); }
+function prevSlide() { if(!editMode) goTo((current - 1 + total) % total); }
+
+document.getElementById('tap-left').addEventListener('click', prevSlide);
+document.getElementById('tap-right').addEventListener('click', nextSlide);
+
+document.addEventListener('keydown', e => {
+  if (editMode) return;
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+
+let touchX = 0;
+document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, {passive:true});
+document.addEventListener('touchend', e => {
+  if (editMode) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) dx < 0 ? nextSlide() : prevSlide();
+}, {passive:true});
+
+function toggleSystem() {
+  const btn = document.getElementById('lock-btn');
+  const status = document.getElementById('system-status');
+  if(btn.style.background === 'rgb(255, 51, 68)') {
+    btn.style.background = '#00ff88';
+    btn.style.boxShadow = '0 0 20px rgba(0,255,136,0.3)';
+    btn.textContent = 'SECURE';
+    status.textContent = 'SYSTEM ARMED';
+    status.style.color = '#00ff88';
+  } else {
+    btn.style.background = '#ff3344';
+    btn.style.boxShadow = '0 0 20px rgba(255,51,68,0.3)';
+    btn.textContent = 'UNLOCKED';
+    status.textContent = 'SYSTEM DISARMED';
+    status.style.color = '#ff3344';
+  }
+}
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+  const ts = now.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'2-digit'}) + ' ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  document.querySelectorAll('.ct1').forEach(el => el.textContent = ts);
+}
+setInterval(updateClock, 1000); updateClock();
+
+document.getElementById('tap-right').addEventListener('click', () => {
+  document.getElementById('tap-hint').style.opacity = '0';
+}, {once: true});
+</script>
+</body>
+</html>
