@@ -43,13 +43,8 @@
     transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.4,0,.2,1);
     transform: translateX(40px);
   }
-  .slide.active {
-    opacity: 1; pointer-events: all;
-    transform: translateX(0);
-  }
-  .slide.exit {
-    opacity: 0; transform: translateX(-40px);
-  }
+  .slide.active { opacity: 1; pointer-events: all; transform: translateX(0); }
+  .slide.exit { opacity: 0; transform: translateX(-40px); }
 
   /* ── GLOBAL NAV ── */
   #nav {
@@ -58,8 +53,7 @@
   }
   .dot {
     width: 8px; height: 8px; border-radius: 50%;
-    background: var(--text-dim); transition: all 0.3s;
-    cursor: pointer;
+    background: var(--text-dim); transition: all 0.3s; cursor: pointer;
   }
   .dot.active { background: var(--green); box-shadow: 0 0 8px var(--green); width: 24px; border-radius: 4px; }
 
@@ -92,23 +86,19 @@
 
   /* ── TOP CONTROLS ── */
   #clock { position: fixed; top: 20px; left: 20px; z-index: 200; font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); }
-  
+
   #edit-btn {
     position: fixed; top: 20px; right: 20px; z-index: 200;
     background: rgba(0,0,0,.6); border: 1px solid var(--border);
     color: var(--text-dim); border-radius: 50%;
     width: 36px; height: 36px;
     display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 16px;
-    transition: all 0.2s;
+    cursor: pointer; font-size: 16px; transition: all 0.2s;
   }
   #edit-btn.active { border-color: var(--amber); color: var(--amber); box-shadow: 0 0 10px rgba(255,170,0,0.3); }
 
   /* ── EDIT MODE STYLES ── */
-  body.edit-mode .editable {
-    position: relative;
-    cursor: pointer;
-  }
+  body.edit-mode .editable { position: relative; cursor: pointer; }
   body.edit-mode .editable::after {
     content: '+ TAP TO CHANGE';
     position: absolute; inset: 0;
@@ -121,8 +111,7 @@
     border-radius: inherit; z-index: 20;
   }
   body.edit-mode .editable:hover::after { opacity: 1; }
-  
-  /* Fallback empty states */
+
   .media-slot { width: 100%; height: 100%; object-fit: contain; background: rgba(0,0,0,0.3); display: block; }
   .cam-feed .media-slot { object-fit: cover; }
 
@@ -137,8 +126,19 @@
   #s1 .shield { width: 80px; height: 80px; margin: 0 auto 20px; filter: drop-shadow(0 0 20px var(--green)); }
   #s1 h1 { font-family: 'Bebas Neue', sans-serif; font-size: 80px; letter-spacing: 10px; color: #fff; line-height: 1; }
   #s1 .tagline { font-family: 'Share Tech Mono', monospace; font-size: 12px; letter-spacing: 4px; color: var(--green); margin-top: 12px; }
-  
-  .status-bar { margin-top: 40px; display: flex; gap: 24px; justify-content: center; }
+
+  /* Trust badges row */
+  .trust-row { display: flex; gap: 12px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+  .trust-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(0,0,0,0.5); border: 1px solid rgba(0,255,136,0.2);
+    padding: 6px 12px; border-radius: 4px;
+    font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--green);
+    letter-spacing: 1px;
+  }
+  .trust-badge .icon { font-size: 14px; }
+
+  .status-bar { margin-top: 20px; display: flex; gap: 24px; justify-content: center; }
   .stat-pill { display: flex; flex-direction: column; align-items: center; background: rgba(0,0,0,0.4); padding: 8px 16px; border-radius: 4px; border: 1px solid var(--border); }
   .stat-pill .num { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--green); line-height: 1; }
   .stat-pill .lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
@@ -151,10 +151,13 @@
   .eco-card {
     background: #0b100d; border: 1px solid rgba(255,255,255,0.03); border-radius: 12px;
     position: relative; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;
+    cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
   }
+  .eco-card:active { border-color: var(--green); box-shadow: 0 0 16px rgba(0,255,136,0.15); }
   .eco-card .img-wrapper { height: 70%; position: relative; border-radius: 8px; }
   .eco-title { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.8); letter-spacing: 1px; text-transform: uppercase; }
   .eco-badge { position: absolute; top: 14px; right: 14px; font-size: 9px; font-family: 'Share Tech Mono', monospace; background: rgba(0,255,136,0.1); color: var(--green); padding: 2px 6px; border-radius: 3px; }
+  .eco-res-badge { position: absolute; bottom: 14px; left: 14px; font-size: 9px; font-family: 'Share Tech Mono', monospace; background: rgba(0,255,136,0.08); color: var(--green-dim); padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(0,255,136,0.15); }
 
   /* Center App Block */
   .eco-center-app {
@@ -176,6 +179,62 @@
   .action-pill { background: rgba(255,255,255,0.04); padding: 6px 12px; border-radius: 6px; font-size: 10px; font-family: 'Share Tech Mono', monospace; color: var(--text-dim); }
   .action-pill.active { color: var(--green); border: 1px solid rgba(0,255,136,0.2); background: rgba(0,255,136,0.02); }
 
+  /* ── DEVICE DETAIL MODAL ── */
+  #device-modal {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  #device-modal.open { opacity: 1; pointer-events: all; }
+  .modal-card {
+    background: #0d1410; border: 1px solid var(--border); border-radius: 16px;
+    width: 90%; max-width: 420px; padding: 28px;
+    transform: translateY(20px); transition: transform 0.3s;
+    position: relative;
+  }
+  #device-modal.open .modal-card { transform: translateY(0); }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    color: var(--text-dim); font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .modal-img-area {
+    width: 100%; height: 160px; background: #060a07; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+    border: 1px solid rgba(255,255,255,0.04); overflow: hidden;
+    cursor: pointer; position: relative;
+  }
+  .modal-img-area img, .modal-img-area video {
+    max-width: 100%; max-height: 100%; object-fit: contain;
+  }
+  .modal-upload-hint {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 6px;
+    color: var(--text-dim); font-family: 'Share Tech Mono', monospace; font-size: 10px;
+    letter-spacing: 1px;
+  }
+  .modal-upload-hint .icon { font-size: 28px; opacity: 0.4; }
+  .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; color: #fff; margin-bottom: 6px; }
+  .modal-res { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--green); letter-spacing: 2px; margin-bottom: 14px; }
+  .modal-desc { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 16px; }
+  .modal-specs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .spec-chip {
+    background: rgba(0,255,136,0.06); border: 1px solid rgba(0,255,136,0.15);
+    color: var(--green-dim); font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; padding: 4px 8px; border-radius: 4px; letter-spacing: 1px;
+  }
+  .modal-media-btns { display: flex; gap: 8px; margin-top: 14px; }
+  .modal-media-btn {
+    flex: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border);
+    background: rgba(0,255,136,0.04); color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace; font-size: 10px; cursor: pointer;
+    text-align: center; letter-spacing: 1px; transition: all 0.2s;
+  }
+  .modal-media-btn:active { border-color: var(--green); color: var(--green); }
+
   /* ── SLIDE 3: LIVE CAMERAS ── */
   #s3 { background: #060a07; padding: 20px 24px 70px; }
   .cam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; height: 100%; }
@@ -183,10 +242,11 @@
     border-radius: 8px; overflow: hidden; border: 1px solid var(--border);
     position: relative; background: #000;
   }
-  .cam-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; pointer-events: none; z-index: 5;}
+  .cam-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; pointer-events: none; z-index: 5; }
   .cam-top { display: flex; justify-content: space-between; }
   .cam-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: #fff; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 2px; }
   .cam-live { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--red); background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 2px; }
+  .cam-res { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--green); background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 2px; }
   .cam-time { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.6); background: rgba(0,0,0,0.4); padding: 2px 6px; border-radius: 2px; }
 
   /* ── SLIDE 4: YARD SIGN ── */
@@ -202,17 +262,79 @@
   #s5 .sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--green); letter-spacing: 2px; margin-bottom: 24px; }
   .feature-list { display: flex; flex-direction: column; gap: 12px; }
   .feature-item { display: flex; gap: 16px; padding: 14px; border-radius: 8px; background: rgba(0,255,136,0.02); border: 1px solid var(--border); }
+  .feature-icon { font-size: 22px; flex-shrink: 0; }
   .feature-text h3 { font-size: 16px; color: #fff; margin-bottom: 2px; }
   .feature-text p { font-size: 13px; color: var(--text-dim); line-height: 1.4; }
 
-  /* ── SLIDE 6: CLOSER ── */
-  #s6 { background: var(--dark); justify-content: center; align-items: center; }
+  /* ── SLIDE 6: OBJECTIONS ── */
+  #s6 { background: var(--dark); padding: 40px 40px 70px; justify-content: center; }
+  #s6 h2 { font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 4px; color: #fff; margin-bottom: 6px; }
+  #s6 .sub { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--amber); letter-spacing: 2px; margin-bottom: 24px; }
+  .obj-list { display: flex; flex-direction: column; gap: 12px; }
+  .obj-item {
+    border-radius: 10px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden; cursor: pointer;
+  }
+  .obj-question {
+    padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;
+    font-size: 15px; color: var(--text); font-weight: 600;
+  }
+  .obj-question .arrow { color: var(--green); font-size: 18px; transition: transform 0.3s; }
+  .obj-answer {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s;
+    font-size: 13px; color: var(--text-dim); line-height: 1.6;
+    padding: 0 16px; border-top: 0px solid var(--border);
+  }
+  .obj-item.open .obj-answer { max-height: 120px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .obj-item.open .arrow { transform: rotate(90deg); }
+
+  /* ── SLIDE 7: CLOSER ── */
+  #s7 { background: var(--dark); justify-content: center; align-items: center; }
   .closer-content { text-align: center; padding: 0 40px; }
   .closer-content .headline { font-family: 'Bebas Neue', sans-serif; font-size: 60px; color: #fff; line-height: 1; margin-bottom: 12px; }
   .closer-content .headline span { color: var(--green); text-shadow: 0 0 20px var(--green); }
-  .closer-content .body-copy { font-size: 15px; color: var(--text-dim); line-height: 1.6; margin-bottom: 32px; max-width: 360px; }
-  .cta-btn { background: var(--green); color: #000; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 3px; padding: 14px 40px; border-radius: 4px; border: none; cursor: pointer; box-shadow: 0 0 30px rgba(0,255,136,0.3); }
-  .guarantee { margin-top: 24px; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+  .closer-content .body-copy { font-size: 15px; color: var(--text-dim); line-height: 1.6; margin-bottom: 28px; max-width: 360px; margin-left: auto; margin-right: auto; }
+
+  /* Urgency strip */
+  .urgency-strip {
+    background: rgba(255,170,0,0.08); border: 1px solid rgba(255,170,0,0.25);
+    border-radius: 6px; padding: 10px 16px; margin-bottom: 24px;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--amber);
+    letter-spacing: 1px; display: flex; align-items: center; gap: 8px; justify-content: center;
+  }
+
+  .cta-btn {
+    display: block; width: 100%;
+    background: var(--green); color: #000; font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 3px; padding: 14px 40px;
+    border-radius: 4px; border: none; cursor: pointer;
+    box-shadow: 0 0 30px rgba(0,255,136,0.3);
+    text-decoration: none; margin-bottom: 12px;
+  }
+  .cta-btn-secondary {
+    display: block; width: 100%;
+    background: transparent; color: var(--text-dim); font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px; letter-spacing: 3px; padding: 12px 40px;
+    border-radius: 4px; border: 1px solid var(--border); cursor: pointer;
+    text-decoration: none; text-align: center; margin-bottom: 20px;
+  }
+  .guarantee { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 1px; }
+
+  /* Rep card */
+  .rep-card {
+    margin-top: 24px; padding: 14px 20px; border-radius: 10px;
+    background: rgba(0,255,136,0.03); border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px; text-align: left;
+  }
+  .rep-avatar {
+    width: 48px; height: 48px; border-radius: 50%; background: var(--dark3);
+    border: 2px solid var(--green); overflow: hidden; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .rep-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: #fff; }
+  .rep-title { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--green); letter-spacing: 1px; }
+  .rep-phone { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 4px; }
 
 </style>
 </head>
@@ -221,12 +343,34 @@
 <div id="clock"></div>
 <div id="edit-btn" onclick="toggleEditMode()">⚙️</div>
 
-<!-- Removed the inline onclicks to prevent double triggers -->
 <div id="tap-left"></div>
 <div id="tap-right"></div>
 
 <!-- Hidden File Input -->
 <input type="file" id="media-upload" accept="image/*,video/*" style="display:none;">
+
+<!-- ── DEVICE DETAIL MODAL ── -->
+<div id="device-modal">
+  <div class="modal-card">
+    <div class="modal-close" id="modal-close-btn">✕</div>
+    <div class="modal-img-area" id="modal-img-area">
+      <div class="modal-upload-hint" id="modal-upload-hint">
+        <div class="icon">📷</div>
+        <div>TAP TO ADD PHOTO/VIDEO</div>
+      </div>
+      <img id="modal-img" src="" alt="" style="display:none;">
+      <video id="modal-vid" autoplay loop muted playsinline style="display:none;"></video>
+    </div>
+    <div class="modal-title" id="modal-title">OUTDOOR CAM</div>
+    <div class="modal-res" id="modal-res">2K RESOLUTION · HDR</div>
+    <div class="modal-desc" id="modal-desc">Crystal-clear 2K footage day and night. See a face from 30 feet away. Motion-triggered alerts hit your phone in under 3 seconds.</div>
+    <div class="modal-specs" id="modal-specs"></div>
+    <div class="modal-media-btns">
+      <div class="modal-media-btn" id="modal-upload-btn">⬆ UPLOAD IMAGE</div>
+      <div class="modal-media-btn" id="modal-upload-vid-btn">▶ UPLOAD VIDEO</div>
+    </div>
+  </div>
+</div>
 
 <div id="slides">
 
@@ -243,10 +387,17 @@
       </div>
       <h1>ALDER</h1>
       <div class="tagline">// RESIDENTIAL SECURITY ECOSYSTEM //</div>
+
+      <div class="trust-row">
+        <div class="trust-badge"><span class="icon">🏆</span> #1 RATED IN MS</div>
+        <div class="trust-badge"><span class="icon">⭐</span> BBB A+ RATING</div>
+        <div class="trust-badge"><span class="icon">🛡</span> 47K+ HOMES</div>
+      </div>
+
       <div class="status-bar">
         <div class="stat-pill"><div class="num">24/7</div><div class="lbl">Monitoring</div></div>
         <div class="stat-pill"><div class="num">60s</div><div class="lbl">Response</div></div>
-        <div class="stat-pill"><div class="num">HD</div><div class="lbl">Cameras</div></div>
+        <div class="stat-pill"><div class="num">2K</div><div class="lbl">Cameras</div></div>
       </div>
     </div>
   </div>
@@ -254,20 +405,22 @@
   <!-- SLIDE 2: HARDWARE ECOSYSTEM -->
   <div class="slide" id="s2">
     <div class="ecosystem-grid">
-      
-      <div class="eco-card">
+
+      <div class="eco-card" onclick="openDevice('outdoor_cam')">
         <div class="eco-title">Outdoor Cam</div>
         <div class="img-wrapper editable" data-key="outdoor_cam">
           <img class="media-slot" id="img-outdoor_cam" src="" alt=" ">
         </div>
         <div class="eco-badge">PRO</div>
+        <div class="eco-res-badge">2K</div>
       </div>
-      
-      <div class="eco-card">
+
+      <div class="eco-card" onclick="openDevice('indoor_cam')">
         <div class="eco-title">Indoor Cam</div>
         <div class="img-wrapper editable" data-key="indoor_cam">
           <img class="media-slot" id="img-indoor_cam" src="" alt=" ">
         </div>
+        <div class="eco-res-badge">2K</div>
       </div>
 
       <div class="eco-center-app">
@@ -283,29 +436,30 @@
         </div>
       </div>
 
-      <div class="eco-card">
+      <div class="eco-card" onclick="openDevice('doorbell_cam')">
         <div class="eco-title">Doorbell Cam</div>
         <div class="img-wrapper editable" data-key="doorbell_cam">
           <img class="media-slot" id="img-doorbell_cam" src="" alt=" ">
         </div>
         <div class="eco-badge">HD</div>
+        <div class="eco-res-badge">2K</div>
       </div>
 
-      <div class="eco-card">
+      <div class="eco-card" onclick="openDevice('smart_hub')">
         <div class="eco-title">Smart Hub</div>
         <div class="img-wrapper editable" data-key="smart_hub">
           <img class="media-slot" id="img-smart_hub" src="" alt=" ">
         </div>
       </div>
 
-      <div class="eco-card" style="grid-column: 1;">
+      <div class="eco-card" style="grid-column: 1;" onclick="openDevice('door_sensor')">
         <div class="eco-title">Door Sensors</div>
         <div class="img-wrapper editable" data-key="door_sensor">
           <img class="media-slot" id="img-door_sensor" src="" alt=" ">
         </div>
       </div>
 
-      <div class="eco-card" style="grid-column: 4;">
+      <div class="eco-card" style="grid-column: 4;" onclick="openDevice('motion_sensor')">
         <div class="eco-title">Motion Det.</div>
         <div class="img-wrapper editable" data-key="motion_sensor">
           <img class="media-slot" id="img-motion_sensor" src="" alt=" ">
@@ -321,28 +475,52 @@
       <div class="cam-feed editable" data-key="cam_front">
         <video class="media-slot" id="vid-cam_front" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
-          <div class="cam-top"><div class="cam-label">FRONT DOOR</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-top">
+            <div class="cam-label">FRONT DOOR</div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <div class="cam-res">2K</div>
+              <div class="cam-live">● LIVE</div>
+            </div>
+          </div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
       <div class="cam-feed editable" data-key="cam_driveway">
         <video class="media-slot" id="vid-cam_driveway" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
-          <div class="cam-top"><div class="cam-label">DRIVEWAY</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-top">
+            <div class="cam-label">DRIVEWAY</div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <div class="cam-res">2K</div>
+              <div class="cam-live">● LIVE</div>
+            </div>
+          </div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
       <div class="cam-feed editable" data-key="cam_backyard">
         <video class="media-slot" id="vid-cam_backyard" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
-          <div class="cam-top"><div class="cam-label">BACKYARD</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-top">
+            <div class="cam-label">BACKYARD</div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <div class="cam-res">2K</div>
+              <div class="cam-live">● LIVE</div>
+            </div>
+          </div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
       <div class="cam-feed editable" data-key="cam_garage">
         <video class="media-slot" id="vid-cam_garage" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
-          <div class="cam-top"><div class="cam-label">GARAGE</div><div class="cam-live">● LIVE</div></div>
+          <div class="cam-top">
+            <div class="cam-label">GARAGE</div>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <div class="cam-res">2K</div>
+              <div class="cam-live">● LIVE</div>
+            </div>
+          </div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
@@ -362,20 +540,116 @@
   <!-- SLIDE 5: WHY ALDER -->
   <div class="slide" id="s5">
     <h2>WHY ALDER</h2>
-    <div class="sub">// What you get on day one //</div>
+    <div class="sub">// What changes the night you sign up //</div>
     <div class="feature-list">
-      <div class="feature-item"><div class="feature-text"><h3>HD Indoor & Outdoor Cameras</h3><p>Crystal clear footage day and night. Motion-triggered alerts straight to your phone.</p></div></div>
-      <div class="feature-item"><div class="feature-text"><h3>Professional 24/7 Monitoring</h3><p>Live agents watching your home around the clock. Average response under 60 seconds.</p></div></div>
-      <div class="feature-item"><div class="feature-text"><h3>Smash & Crash Protected</h3><p>Even if someone destroys the panel — the signal already went out. You're covered.</p></div></div>
+      <div class="feature-item">
+        <div class="feature-icon">📹</div>
+        <div class="feature-text">
+          <h3>See a face from 30 feet away — at night</h3>
+          <p>2K cameras with night vision so clear you'll recognize anyone on your property before they reach the door.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🚨</div>
+        <div class="feature-text">
+          <h3>Live agents in under 60 seconds</h3>
+          <p>Not a recording. Not a bot. A real person watching your home 24/7 — every night of the year.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💥</div>
+        <div class="feature-text">
+          <h3>Even if they smash the panel — you're covered</h3>
+          <p>Smash & Crash protection means the signal went out the second it triggered. The alarm wins either way.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📵</div>
+        <div class="feature-text">
+          <h3>Works when your WiFi doesn't</h3>
+          <p>Cellular backup keeps your system online even if a burglar cuts your internet.</p>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- SLIDE 6: OBJECTION HANDLERS -->
   <div class="slide" id="s6">
+    <h2>HEARD THAT BEFORE</h2>
+    <div class="sub">// TAP AN OBJECTION //</div>
+    <div class="obj-list">
+
+      <div class="obj-item" onclick="toggleObj(this)">
+        <div class="obj-question">
+          <span>"I already have ADT / Ring."</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="obj-answer">
+          Ring is a camera — not a monitoring system. ADT averages 5+ minute response times. Alder's average is under 60 seconds with live human agents. Most customers switching from ADT cut their monthly cost too.
+        </div>
+      </div>
+
+      <div class="obj-item" onclick="toggleObj(this)">
+        <div class="obj-question">
+          <span>"I need to talk to my spouse first."</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="obj-answer">
+          Totally fair — and I respect that. That's actually why I'm here today instead of sending a flyer. You've got a 3-day right of rescission after signing — zero pressure. But tonight your home is unprotected.
+        </div>
+      </div>
+
+      <div class="obj-item" onclick="toggleObj(this)">
+        <div class="obj-question">
+          <span>"I can't afford it right now."</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="obj-answer">
+          No credit check required. Easy approval, same-day install. Most homeowners pay less per day than a fast food meal — and break-ins cost the average family $3,000+. This pays for itself the day it matters.
+        </div>
+      </div>
+
+      <div class="obj-item" onclick="toggleObj(this)">
+        <div class="obj-question">
+          <span>"I'll think about it."</span>
+          <span class="arrow">›</span>
+        </div>
+        <div class="obj-answer">
+          I get it. Can I ask — is it price, or are you not sure if you need it? Because I'm in this neighborhood today only. Three houses on this street already signed up this week. I'd hate for you to be the gap in the block.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SLIDE 7: CLOSER -->
+  <div class="slide" id="s7">
     <div class="closer-content">
       <div class="headline">YOUR HOME<br><span>DESERVES THIS.</span></div>
       <p class="body-copy">One system. One sign. One call — and you're protected tonight.</p>
-      <button class="cta-btn" onclick="alert('Let\'s lock it in.')">GET PROTECTED TODAY</button>
+
+      <div class="urgency-strip">
+        ⚡ IN THIS NEIGHBORHOOD TODAY ONLY
+      </div>
+
+      <a class="cta-btn" href="sms:&body=https://aldersecure.pages.dev" id="imessage-btn">
+        GET YOUR QUOTE — TEXT ME THE LINK
+      </a>
+
+      <a class="cta-btn-secondary" href="https://aldersecure.pages.dev" target="_blank">
+        OPEN QUOTE FORM →
+      </a>
+
       <div class="guarantee">✓ No credit check &nbsp;·&nbsp; ✓ Easy approval &nbsp;·&nbsp; ✓ Same-day install</div>
+
+      <div class="rep-card">
+        <div class="rep-avatar">🧑</div>
+        <div>
+          <div class="rep-name" id="rep-name-display">YOUR REP</div>
+          <div class="rep-title">ALDER SECURITY · FIELD SPECIALIST</div>
+          <div class="rep-phone" id="rep-phone-display">TAP EDIT TO SET YOUR INFO</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -388,11 +662,118 @@
   <div class="dot" onclick="goTo(3)"></div>
   <div class="dot" onclick="goTo(4)"></div>
   <div class="dot" onclick="goTo(5)"></div>
+  <div class="dot" onclick="goTo(6)"></div>
 </div>
 <div id="tap-hint">TAP TO ADVANCE</div>
 
 <script>
-// ── INDEXED DB FOR LARGE MEDIA FILES ──
+// ── DEVICE DATA ──
+const deviceData = {
+  outdoor_cam: {
+    title: 'OUTDOOR CAM',
+    res: '2K RESOLUTION · HDR · NIGHT VISION',
+    desc: 'Crystal-clear 2K footage day and night. See a face from 30 feet away. Motion-triggered alerts hit your phone in under 3 seconds.',
+    specs: ['2K 1080p+', 'Night Vision', 'IP67 Rated', 'Motion Alert', 'Wide Angle', '2-Way Audio']
+  },
+  indoor_cam: {
+    title: 'INDOOR CAM',
+    res: '2K RESOLUTION · 360° PAN/TILT',
+    desc: 'Full room coverage with 360° pan and tilt. Check in on your kids, pets, or valuables from anywhere in the world.',
+    specs: ['2K Resolution', '360° Pan/Tilt', '2-Way Audio', 'Night Mode', 'Auto-Track', 'Privacy Mode']
+  },
+  doorbell_cam: {
+    title: 'DOORBELL CAM',
+    res: '2K RESOLUTION · INSTANT ALERTS',
+    desc: 'Know who\'s at your door before they ring. 2K video with two-way audio. Works even when you\'re not home.',
+    specs: ['2K HD', 'Motion Zone', '2-Way Audio', 'Night Vision', 'Instant Push', 'Cloud Storage']
+  },
+  smart_hub: {
+    title: 'SMART HUB',
+    res: 'CENTRAL CONTROL PANEL',
+    desc: 'The brain of your system. Connects every sensor, camera, and detector in real time. Cellular backup keeps it online even if WiFi goes down.',
+    specs: ['Cellular Backup', 'Z-Wave', 'Touch Screen', 'Battery Backup', 'Smash Protect', 'LTE Ready']
+  },
+  door_sensor: {
+    title: 'DOOR SENSOR',
+    res: 'INSTANT BREACH DETECTION',
+    desc: 'Triggers the moment a door or window opens. Instant signal to monitoring center — before a burglar even steps inside.',
+    specs: ['Instant Alert', 'Door & Window', 'Tamper Detect', 'Long Battery', 'Wireless', 'Easy Install']
+  },
+  motion_sensor: {
+    title: 'MOTION DETECTOR',
+    res: 'PIR · 40FT RANGE · PET-IMMUNE',
+    desc: 'Detects motion up to 40 feet away. Pet-immune up to 85 lbs so you\'re not getting false alarms from your dog at 2am.',
+    specs: ['40ft Range', 'Pet-Immune', '85lb Limit', '360° Option', 'Wireless', 'Instant Signal']
+  }
+};
+
+let currentModalKey = null;
+let modalFileType = null;
+
+function openDevice(key) {
+  if (editMode) return;
+  const data = deviceData[key];
+  if (!data) return;
+  currentModalKey = key;
+
+  document.getElementById('modal-title').textContent = data.title;
+  document.getElementById('modal-res').textContent = data.res;
+  document.getElementById('modal-desc').textContent = data.desc;
+
+  const specsEl = document.getElementById('modal-specs');
+  specsEl.innerHTML = data.specs.map(s => `<div class="spec-chip">${s}</div>`).join('');
+
+  // Load existing media if any
+  getMediaBlob(key).then(blob => {
+    const imgEl = document.getElementById('modal-img');
+    const vidEl = document.getElementById('modal-vid');
+    const hint = document.getElementById('modal-upload-hint');
+    imgEl.style.display = 'none';
+    vidEl.style.display = 'none';
+    hint.style.display = 'flex';
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      if (blob.type.startsWith('video/')) {
+        vidEl.src = url; vidEl.style.display = 'block'; hint.style.display = 'none';
+      } else {
+        imgEl.src = url; imgEl.style.display = 'block'; hint.style.display = 'none';
+      }
+    }
+  });
+
+  document.getElementById('device-modal').classList.add('open');
+}
+
+document.getElementById('modal-close-btn').addEventListener('click', () => {
+  document.getElementById('device-modal').classList.remove('open');
+});
+
+document.getElementById('device-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('device-modal')) {
+    document.getElementById('device-modal').classList.remove('open');
+  }
+});
+
+document.getElementById('modal-img-area').addEventListener('click', () => {
+  if (currentModalKey) { modalFileType = 'any'; fileInput.accept = 'image/*,video/*'; fileInput.click(); }
+});
+document.getElementById('modal-upload-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (currentModalKey) { modalFileType = 'image'; fileInput.accept = 'image/*'; fileInput.click(); }
+});
+document.getElementById('modal-upload-vid-btn').addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (currentModalKey) { modalFileType = 'video'; fileInput.accept = 'video/*'; fileInput.click(); }
+});
+
+// ── OBJECTION TOGGLE ──
+function toggleObj(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.obj-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+// ── INDEXED DB ──
 const dbName = "AlderMediaVault";
 let db;
 
@@ -401,12 +782,10 @@ function initDB() {
     const req = indexedDB.open(dbName, 1);
     req.onupgradeneeded = e => {
       db = e.target.result;
-      if (!db.objectStoreNames.contains("media")) {
-        db.createObjectStore("media");
-      }
+      if (!db.objectStoreNames.contains("media")) db.createObjectStore("media");
     };
     req.onsuccess = e => { db = e.target.result; resolve(); };
-    req.onerror = e => reject("IndexedDB error");
+    req.onerror = () => reject("IndexedDB error");
   });
 }
 
@@ -424,7 +803,7 @@ function getMediaBlob(key) {
   });
 }
 
-// ── EDIT MODE & UPLOAD LOGIC ──
+// ── EDIT MODE & UPLOAD ──
 let editMode = false;
 let currentEditKey = null;
 const fileInput = document.getElementById('media-upload');
@@ -434,86 +813,86 @@ function toggleEditMode() {
   const btn = document.getElementById('edit-btn');
   const tapLeft = document.getElementById('tap-left');
   const tapRight = document.getElementById('tap-right');
-  
-  if(editMode) {
+  if (editMode) {
     document.body.classList.add('edit-mode');
     btn.classList.add('active');
-    // Disable tap zones so you can click the edges to upload
-    tapLeft.style.pointerEvents = 'none'; 
+    tapLeft.style.pointerEvents = 'none';
     tapRight.style.pointerEvents = 'none';
   } else {
     document.body.classList.remove('edit-mode');
     btn.classList.remove('active');
-    // Re-enable tap zones for pitching
-    tapLeft.style.pointerEvents = 'all'; 
+    tapLeft.style.pointerEvents = 'all';
     tapRight.style.pointerEvents = 'all';
   }
 }
 
-// Bind click to editables
 document.querySelectorAll('.editable').forEach(el => {
   el.addEventListener('click', (e) => {
-    if (!editMode) return; 
+    if (!editMode) return;
     currentEditKey = el.getAttribute('data-key');
+    currentModalKey = null;
+    fileInput.accept = 'image/*,video/*';
     fileInput.click();
   });
 });
 
 fileInput.addEventListener('change', async (e) => {
   const file = e.target.files[0];
-  if (!file || !currentEditKey) return;
-  
-  // Save to Database
-  saveMediaBlob(currentEditKey, file);
-  
-  // Update DOM immediately
-  renderMedia(currentEditKey, file);
-  
-  // Reset input
+  if (!file) return;
+
+  const targetKey = currentModalKey || currentEditKey;
+  if (!targetKey) return;
+
+  saveMediaBlob(targetKey, file);
+  renderMedia(targetKey, file);
+
+  // Update modal preview if open
+  if (currentModalKey) {
+    const imgEl = document.getElementById('modal-img');
+    const vidEl = document.getElementById('modal-vid');
+    const hint = document.getElementById('modal-upload-hint');
+    const url = URL.createObjectURL(file);
+    if (file.type.startsWith('video/')) {
+      vidEl.src = url; vidEl.style.display = 'block';
+      imgEl.style.display = 'none'; hint.style.display = 'none';
+    } else {
+      imgEl.src = url; imgEl.style.display = 'block';
+      vidEl.style.display = 'none'; hint.style.display = 'none';
+    }
+  }
+
   fileInput.value = '';
+  currentEditKey = null;
+  modalFileType = null;
 });
 
 function renderMedia(key, fileBlob) {
   const url = URL.createObjectURL(fileBlob);
   const imgEl = document.getElementById('img-' + key);
   const vidEl = document.getElementById('vid-' + key);
-  
-  if(imgEl) {
-    if(fileBlob.type.startsWith('video/')) {
-      alert("Please select an image for this slot.");
-      return;
-    }
-    imgEl.src = url;
-    imgEl.style.background = 'transparent';
+  if (imgEl) {
+    if (fileBlob.type.startsWith('video/')) { alert("Please select an image for this slot."); return; }
+    imgEl.src = url; imgEl.style.background = 'transparent';
   }
-  
-  if(vidEl) {
-    if(fileBlob.type.startsWith('image/')) {
-      // Allows static images as a fallback on the camera screen
-      vidEl.poster = url;
-    } else {
-      vidEl.src = url;
-      // Force autoplay when loading dynamically
-      vidEl.play().catch(e => console.log("Autoplay prevented:", e)); 
-    }
+  if (vidEl) {
+    if (fileBlob.type.startsWith('image/')) { vidEl.poster = url; }
+    else { vidEl.src = url; vidEl.play().catch(() => {}); }
     vidEl.style.background = 'transparent';
   }
 }
 
-// On Load: Fetch all saved media and render
 window.addEventListener('DOMContentLoaded', async () => {
   await initDB();
-  const keys = ['outdoor_cam', 'indoor_cam', 'doorbell_cam', 'smart_hub', 'door_sensor', 'motion_sensor', 'cam_front', 'cam_driveway', 'cam_backyard', 'cam_garage', 'yard_sign'];
-  
-  for(let key of keys) {
+  const keys = ['outdoor_cam','indoor_cam','doorbell_cam','smart_hub','door_sensor','motion_sensor','cam_front','cam_driveway','cam_backyard','cam_garage','yard_sign'];
+  for (let key of keys) {
     const blob = await getMediaBlob(key);
-    if(blob) renderMedia(key, blob);
+    if (blob) renderMedia(key, blob);
   }
 });
 
-// ── SLIDER & UI LOGIC ──
+// ── SLIDER ──
 let current = 0;
-const total = 6;
+const total = 7;
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.dot');
 
@@ -526,10 +905,9 @@ function goTo(n) {
   slides[current].classList.add('active');
   dots[current].classList.add('active');
 }
-function nextSlide() { if(!editMode) goTo((current + 1) % total); }
-function prevSlide() { if(!editMode) goTo((current - 1 + total) % total); }
+function nextSlide() { if (!editMode && !document.getElementById('device-modal').classList.contains('open')) goTo((current + 1) % total); }
+function prevSlide() { if (!editMode && !document.getElementById('device-modal').classList.contains('open')) goTo((current - 1 + total) % total); }
 
-// These JS listeners are all you need. The inline HTML ones were causing the double-skip.
 document.getElementById('tap-left').addEventListener('click', prevSlide);
 document.getElementById('tap-right').addEventListener('click', nextSlide);
 
@@ -540,17 +918,18 @@ document.addEventListener('keydown', e => {
 });
 
 let touchX = 0;
-document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, {passive:true});
+document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, { passive: true });
 document.addEventListener('touchend', e => {
   if (editMode) return;
+  if (document.getElementById('device-modal').classList.contains('open')) return;
   const dx = e.changedTouches[0].clientX - touchX;
   if (Math.abs(dx) > 50) dx < 0 ? nextSlide() : prevSlide();
-}, {passive:true});
+}, { passive: true });
 
 function toggleSystem() {
   const btn = document.getElementById('lock-btn');
   const status = document.getElementById('system-status');
-  if(btn.style.background === 'rgb(255, 51, 68)') {
+  if (btn.style.background === 'rgb(255, 51, 68)') {
     btn.style.background = '#00ff88';
     btn.style.boxShadow = '0 0 20px rgba(0,255,136,0.3)';
     btn.textContent = 'SECURE';
@@ -567,15 +946,15 @@ function toggleSystem() {
 
 function updateClock() {
   const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
-  const ts = now.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'2-digit'}) + ' ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+  const ts = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' }) + ' ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
   document.querySelectorAll('.ct1').forEach(el => el.textContent = ts);
 }
 setInterval(updateClock, 1000); updateClock();
 
 document.getElementById('tap-right').addEventListener('click', () => {
   document.getElementById('tap-hint').style.opacity = '0';
-}, {once: true});
+}, { once: true });
 </script>
 </body>
 </html>
