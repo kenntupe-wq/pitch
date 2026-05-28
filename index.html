@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -45,8 +45,10 @@ html,body{width:100%;height:100%;background:var(--dark);font-family:'Rajdhani',s
 /* EDIT MODE */
 body.edit-mode .editable{position:relative;cursor:pointer;}
 body.edit-mode .editable::after{content:'TAP TO CHANGE';position:absolute;inset:0;background:rgba(255,170,0,0.2);border:2px dashed var(--amber);color:var(--amber);display:-webkit-flex;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:11px;opacity:0;transition:opacity 0.2s;border-radius:inherit;z-index:20;}
-body.edit-mode .editable:hover::after{opacity:1;}
+body.edit-mode .editable:hover::after,body.edit-mode .editable:active::after{opacity:1;}
 .media-slot{width:100%;height:100%;object-fit:contain;background:rgba(0,0,0,0.3);display:block;}
+.media-slot[src=""],.media-slot:not([src]){background:rgba(0,0,0,0.5);}
+video.media-slot:not([src]){background:rgba(0,0,0,0.5);}
 .cam-feed .media-slot{object-fit:cover;}
 
 /* ── SLIDE 1: HERO ── */
@@ -68,107 +70,18 @@ body.edit-mode .editable:hover::after{opacity:1;}
 
 /* ── SLIDE 2: HARDWARE ── */
 #s2{background:#050806;}
-
-/* FIX: proper flex container that fills the slide */
-.s2-inner{
-  display:flex;
-  flex-direction:column;
-  width:100%;
-  height:100%;
-  padding:12px 12px 58px;
-  box-sizing:border-box;
-  overflow:hidden;
-}
-
-.ecosystem-grid{
-  display:flex;
-  gap:8px;
-  flex:1;
-  min-height:0; /* CRITICAL: allows flex children to shrink below content size */
-  overflow:hidden;
-}
-
-.eco-col-left,.eco-col-right{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  flex:1;
-  min-width:0;
-  min-height:0;
-  overflow:hidden;
-}
-
-.eco-center{
-  flex:1.4;
-  min-width:0;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.eco-card{
-  background:#0b100d;
-  border:1px solid rgba(255,255,255,0.04);
-  border-radius:10px;
-  position:relative;
-  padding:8px;
-  display:flex;
-  flex-direction:column;
-  flex:1;
-  overflow:hidden;
-  cursor:pointer;
-  transition:border-color 0.2s;
-  min-height:0; /* CRITICAL */
-}
+.s2-inner{display:flex;flex-direction:column;width:100%;height:100%;padding:12px 12px 58px;box-sizing:border-box;overflow:hidden;}
+.ecosystem-grid{display:flex;gap:8px;flex:1;min-height:0;overflow:hidden;}
+.eco-col-left,.eco-col-right{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0;min-height:0;overflow:hidden;}
+.eco-center{flex:1.4;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;}
+.eco-card{background:#0b100d;border:1px solid rgba(255,255,255,0.04);border-radius:10px;position:relative;padding:8px;display:flex;flex-direction:column;flex:1;overflow:hidden;cursor:pointer;transition:border-color 0.2s;min-height:0;}
 .eco-card:active{border-color:var(--green);}
-
-.eco-card .img-wrapper{
-  flex:1;
-  position:relative;
-  border-radius:6px;
-  overflow:hidden;
-  min-height:0; /* CRITICAL */
-}
-
+.eco-card .img-wrapper{flex:1;position:relative;border-radius:6px;overflow:hidden;min-height:0;}
 .eco-title{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,255,255,0.75);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;flex-shrink:0;}
 .eco-badge{position:absolute;top:8px;right:8px;font-size:8px;font-family:'Share Tech Mono',monospace;background:rgba(0,255,136,0.1);color:var(--green);padding:2px 5px;border-radius:3px;}
 .eco-res-badge{position:absolute;bottom:8px;left:8px;font-size:8px;font-family:'Share Tech Mono',monospace;background:rgba(0,255,136,0.08);color:var(--green-dim);padding:2px 5px;border-radius:3px;border:1px solid rgba(0,255,136,0.15);}
-
-/* FIX: center column now properly fills and distributes space */
-.eco-center-app{
-  background:linear-gradient(145deg,#0d1611,#060a07);
-  border:1px solid var(--border);
-  box-shadow:inset 0 0 20px rgba(0,255,136,0.05);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-around;
-  align-items:center;
-  padding:12px 8px;
-  border-radius:10px;
-  flex:1;
-  min-height:0;
-  overflow:hidden;
-}
-
-.mock-phone{
-  width:min(120px,80%);
-  /* FIX: use flex-grow constrained height instead of fixed px */
-  flex:1;
-  max-height:240px;
-  min-height:80px;
-  background:#101914;
-  border:3px solid #1a2920;
-  border-radius:20px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  box-shadow:0 10px 30px rgba(0,0,0,0.5);
-  flex-shrink:1;
-  gap:10px;
-}
-
+.eco-center-app{background:linear-gradient(145deg,#0d1611,#060a07);border:1px solid var(--border);box-shadow:inset 0 0 20px rgba(0,255,136,0.05);display:flex;flex-direction:column;justify-content:space-around;align-items:center;padding:12px 8px;border-radius:10px;flex:1;min-height:0;overflow:hidden;}
+.mock-phone{width:min(120px,80%);flex:1;max-height:240px;min-height:80px;background:#101914;border:3px solid #1a2920;border-radius:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,0.5);flex-shrink:1;gap:10px;}
 .phone-btn{width:56px;height:56px;border-radius:50%;background:var(--green);box-shadow:0 0 20px rgba(0,255,136,0.3);display:-webkit-flex;display:flex;align-items:center;justify-content:center;color:#000;font-weight:bold;font-size:11px;cursor:pointer;transition:all 0.2s;flex-shrink:0;}
 .phone-status{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--green);}
 .app-actions{display:-webkit-flex;display:flex;gap:6px;width:100%;justify-content:center;flex-shrink:0;flex-wrap:wrap;}
@@ -198,16 +111,7 @@ body.edit-mode .editable:hover::after{opacity:1;}
 #s3{background:#060a07;}
 .s3-inner{display:flex;flex-direction:column;width:100%;height:100%;padding:12px 12px 58px;box-sizing:border-box;overflow:hidden;}
 .cam-grid{display:flex;flex-wrap:wrap;gap:8px;flex:1;min-height:0;}
-.cam-feed{
-  width:calc(50% - 4px);
-  height:calc(50% - 4px);
-  border-radius:8px;
-  overflow:hidden;
-  border:1px solid var(--border);
-  position:relative;
-  background:#000;
-  flex-shrink:0;
-}
+.cam-feed{width:calc(50% - 4px);height:calc(50% - 4px);border-radius:8px;overflow:hidden;border:1px solid var(--border);position:relative;background:#000;flex-shrink:0;}
 .cam-overlay{position:absolute;inset:0;display:-webkit-flex;display:flex;flex-direction:column;justify-content:space-between;padding:8px;pointer-events:none;z-index:5;}
 .cam-top{display:-webkit-flex;display:flex;justify-content:space-between;align-items:center;}
 .cam-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:#fff;background:rgba(0,0,0,0.6);padding:2px 5px;border-radius:2px;}
@@ -346,7 +250,7 @@ body.edit-mode .editable:hover::after{opacity:1;}
 .ins-value.amber{color:var(--amber);}
 .slider-wrap{margin:14px 0;}
 .slider-label{display:-webkit-flex;display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);margin-bottom:6px;}
-input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--border);outline:none;}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--border);outline:none;touch-action:none;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 0 8px rgba(0,255,136,0.4);}
 .ins-result{background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.2);border-radius:8px;padding:14px;text-align:center;}
 .ins-result-big{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--green);line-height:1;}
@@ -391,7 +295,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <div id="edit-btn">⚙️</div>
 <div id="tap-left"></div>
 <div id="tap-right"></div>
-<input type="file" id="media-upload" accept="image/*,video/*" style="display:none;">
+<!-- Hidden file input — lives outside any modal so it's always accessible -->
+<input type="file" id="media-upload" accept="image/*,video/*" style="display:none;position:fixed;top:-1000px;">
 
 <!-- DEVICE MODAL -->
 <div id="device-modal">
@@ -433,7 +338,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     <input class="settings-input" id="set-city" type="text" placeholder="e.g. Ridgeland, MS">
   </div>
   <div class="settings-group">
-    <label>UPLOAD MEDIA (tap a device card on Slide 2 to add product photos)</label>
+    <label>PRODUCT PHOTOS — tap a device card on Slide 2 to add photos</label>
   </div>
   <button class="settings-save" id="settings-save-btn">SAVE &amp; CLOSE</button>
 </div>
@@ -467,30 +372,24 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   </div>
 </div>
 
-<!-- S2: HARDWARE — FIX: use s2-inner wrapper for proper height containment -->
+<!-- S2: HARDWARE -->
 <div class="slide" id="s2">
   <div class="s2-inner">
     <div class="ecosystem-grid">
       <div class="eco-col-left">
         <div class="eco-card" onclick="openDevice('outdoor_cam')">
           <div class="eco-title">Outdoor Cam</div>
-          <div class="img-wrapper editable" data-key="outdoor_cam">
-            <img class="media-slot" id="img-outdoor_cam" src="" alt=" ">
-          </div>
+          <div class="img-wrapper"><img class="media-slot" id="img-outdoor_cam" src="" alt=" "></div>
           <div class="eco-badge">PRO</div><div class="eco-res-badge">2K</div>
         </div>
         <div class="eco-card" onclick="openDevice('doorbell_cam')">
           <div class="eco-title">Doorbell Cam</div>
-          <div class="img-wrapper editable" data-key="doorbell_cam">
-            <img class="media-slot" id="img-doorbell_cam" src="" alt=" ">
-          </div>
+          <div class="img-wrapper"><img class="media-slot" id="img-doorbell_cam" src="" alt=" "></div>
           <div class="eco-badge">HD</div><div class="eco-res-badge">2K</div>
         </div>
         <div class="eco-card" onclick="openDevice('door_sensor')">
           <div class="eco-title">Door Sensor</div>
-          <div class="img-wrapper editable" data-key="door_sensor">
-            <img class="media-slot" id="img-door_sensor" src="" alt=" ">
-          </div>
+          <div class="img-wrapper"><img class="media-slot" id="img-door_sensor" src="" alt=" "></div>
         </div>
       </div>
 
@@ -513,54 +412,48 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
       <div class="eco-col-right">
         <div class="eco-card" onclick="openDevice('indoor_cam')">
           <div class="eco-title">Indoor Cam</div>
-          <div class="img-wrapper editable" data-key="indoor_cam">
-            <img class="media-slot" id="img-indoor_cam" src="" alt=" ">
-          </div>
+          <div class="img-wrapper"><img class="media-slot" id="img-indoor_cam" src="" alt=" "></div>
           <div class="eco-res-badge">2K</div>
         </div>
         <div class="eco-card" onclick="openDevice('smart_hub')">
           <div class="eco-title">Smart Hub</div>
-          <div class="img-wrapper editable" data-key="smart_hub">
-            <img class="media-slot" id="img-smart_hub" src="" alt=" ">
-          </div>
+          <div class="img-wrapper"><img class="media-slot" id="img-smart_hub" src="" alt=" "></div>
         </div>
         <div class="eco-card" onclick="openDevice('motion_sensor')">
           <div class="eco-title">Motion Det.</div>
-          <div class="img-wrapper editable" data-key="motion_sensor">
-            <img class="media-slot" id="img-motion_sensor" src="" alt=" ">
-          </div>
+          <div class="img-wrapper"><img class="media-slot" id="img-motion_sensor" src="" alt=" "></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- S3: CAMERAS — FIX: use s3-inner for proper containment -->
+<!-- S3: CAMERAS -->
 <div class="slide" id="s3">
   <div class="s3-inner">
     <div class="cam-grid">
-      <div class="cam-feed editable" data-key="cam_front">
+      <div class="cam-feed" id="feed-cam_front" onclick="uploadCamFeed('cam_front')">
         <video class="media-slot" id="vid-cam_front" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">FRONT DOOR</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
-      <div class="cam-feed editable" data-key="cam_driveway">
+      <div class="cam-feed" id="feed-cam_driveway" onclick="uploadCamFeed('cam_driveway')">
         <video class="media-slot" id="vid-cam_driveway" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">DRIVEWAY</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
-      <div class="cam-feed editable" data-key="cam_backyard">
+      <div class="cam-feed" id="feed-cam_backyard" onclick="uploadCamFeed('cam_backyard')">
         <video class="media-slot" id="vid-cam_backyard" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">BACKYARD</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
-      <div class="cam-feed editable" data-key="cam_garage">
+      <div class="cam-feed" id="feed-cam_garage" onclick="uploadCamFeed('cam_garage')">
         <video class="media-slot" id="vid-cam_garage" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">GARAGE</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
@@ -573,11 +466,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 
 <!-- S4: YARD SIGN -->
 <div class="slide" id="s4">
-  <div style="text-align:center;">
-    <div class="yard-sign-wrapper editable" data-key="yard_sign">
-      <img class="media-slot" id="img-yard_sign" src="" alt=" " style="filter:drop-shadow(0 0 40px rgba(0,255,136,0.15));">
+  <div style="text-align:center;" onclick="uploadYardSign()">
+    <div class="yard-sign-wrapper">
+      <img class="media-slot" id="img-yard_sign" src="" alt=" " style="filter:drop-shadow(0 0 40px rgba(0,255,136,0.15));border-radius:10px;cursor:pointer;">
     </div>
-    <div class="sign-caption">Every home we protect gets a<br><span>visible deterrent</span> at the curb</div>
+    <div class="sign-caption">Every home we protect gets a<br><span>visible deterrent</span> at the curb<br><span style="font-size:9px;opacity:0.5;">TAP IMAGE TO REPLACE</span></div>
   </div>
 </div>
 
@@ -845,6 +738,7 @@ function dbGet(key){return new Promise(res=>{const tx=db.transaction("media","re
 // ── SLIDER ──
 let current=0;
 let editMode=false;
+
 function goTo(n){
   const slides=document.querySelectorAll('.slide');
   const dots=document.querySelectorAll('.dot');
@@ -856,21 +750,39 @@ function goTo(n){
   slides[current].classList.add('active');
   dots[current].classList.add('active');
 }
-function nextSlide(){if(!editMode&&!modalOpen()&&!settingsOpen())goTo((current+1)%TOTAL);}
-function prevSlide(){if(!editMode&&!modalOpen()&&!settingsOpen())goTo((current-1+TOTAL)%TOTAL);}
+function nextSlide(){if(!modalOpen()&&!settingsOpen())goTo((current+1)%TOTAL);}
+function prevSlide(){if(!modalOpen()&&!settingsOpen())goTo((current-1+TOTAL)%TOTAL);}
 function modalOpen(){return document.getElementById('device-modal').classList.contains('open');}
 function settingsOpen(){return document.getElementById('settings-panel').classList.contains('open');}
 
 document.getElementById('tap-left').addEventListener('click',prevSlide);
 document.getElementById('tap-right').addEventListener('click',nextSlide);
-document.addEventListener('keydown',e=>{if(editMode)return;if(e.key==='ArrowRight'||e.key===' ')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
-let touchX=0;
-document.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});
-document.addEventListener('touchend',e=>{
-  if(editMode||modalOpen()||settingsOpen())return;
-  const dx=e.changedTouches[0].clientX-touchX;
-  if(Math.abs(dx)>50){dx<0?nextSlide():prevSlide();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
+
+// ── TOUCH / SWIPE — block when interacting with slider or interactive elements ──
+let touchStartX=0, touchStartY=0, touchIsSlider=false;
+document.addEventListener('touchstart',e=>{
+  touchStartX=e.touches[0].clientX;
+  touchStartY=e.touches[0].clientY;
+  // Mark if touch started on a range input or interactive element
+  const tgt=e.target;
+  touchIsSlider=(tgt.tagName==='INPUT'&&tgt.type==='range')||
+    tgt.closest('.obj-item')||
+    tgt.closest('.pkg-card')||
+    tgt.closest('.testi-nav')||
+    tgt.closest('#nav')||
+    tgt.closest('.modal-card')||
+    tgt.closest('#settings-panel');
 },{passive:true});
+
+document.addEventListener('touchend',e=>{
+  if(modalOpen()||settingsOpen()||touchIsSlider)return;
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  const dy=Math.abs(e.changedTouches[0].clientY-touchStartY);
+  // Only swipe if horizontal motion dominates
+  if(Math.abs(dx)>50&&dy<60){dx<0?nextSlide():prevSlide();}
+},{passive:true});
+
 document.getElementById('tap-right').addEventListener('click',()=>{document.getElementById('tap-hint').style.opacity='0';},{once:true});
 
 // ── CLOCK ──
@@ -889,34 +801,21 @@ document.getElementById('edit-btn').addEventListener('click',()=>{
     editMode=false;
     document.body.classList.remove('edit-mode');
     document.getElementById('edit-btn').classList.remove('active');
-    document.getElementById('tap-left').style.pointerEvents='all';
-    document.getElementById('tap-right').style.pointerEvents='all';
     return;
   }
   editMode=!editMode;
   const btn=document.getElementById('edit-btn');
-  const tapL=document.getElementById('tap-left');
-  const tapR=document.getElementById('tap-right');
   if(editMode){
     document.body.classList.add('edit-mode');btn.classList.add('active');
-    tapL.style.pointerEvents='none';tapR.style.pointerEvents='none';
     document.getElementById('settings-panel').classList.add('open');
   } else {
     document.body.classList.remove('edit-mode');btn.classList.remove('active');
-    tapL.style.pointerEvents='all';tapR.style.pointerEvents='all';
     document.getElementById('settings-panel').classList.remove('open');
   }
 });
 
 // ── SETTINGS ──
-document.getElementById('settings-close-btn').addEventListener('click',()=>{
-  document.getElementById('settings-panel').classList.remove('open');
-  editMode=false;
-  document.body.classList.remove('edit-mode');
-  document.getElementById('edit-btn').classList.remove('active');
-  document.getElementById('tap-left').style.pointerEvents='all';
-  document.getElementById('tap-right').style.pointerEvents='all';
-});
+document.getElementById('settings-close-btn').addEventListener('click',closeSettings);
 document.getElementById('settings-save-btn').addEventListener('click',()=>{
   const name=document.getElementById('set-name').value.trim()||'YOUR REP';
   const phone=document.getElementById('set-phone').value.trim()||'—';
@@ -924,14 +823,17 @@ document.getElementById('settings-save-btn').addEventListener('click',()=>{
   document.getElementById('rep-name-display').textContent=name.toUpperCase();
   document.getElementById('rep-phone-display').textContent=phone;
   if(city){document.getElementById('crime-city-label').textContent='IN '+city.toUpperCase();}
-  localStorage.setItem('alder_name',name);localStorage.setItem('alder_phone',phone);localStorage.setItem('alder_city',city);
+  localStorage.setItem('alder_name',name);
+  localStorage.setItem('alder_phone',phone);
+  localStorage.setItem('alder_city',city);
+  closeSettings();
+});
+function closeSettings(){
   document.getElementById('settings-panel').classList.remove('open');
   editMode=false;
   document.body.classList.remove('edit-mode');
   document.getElementById('edit-btn').classList.remove('active');
-  document.getElementById('tap-left').style.pointerEvents='all';
-  document.getElementById('tap-right').style.pointerEvents='all';
-});
+}
 function loadSettings(){
   const name=localStorage.getItem('alder_name');
   const phone=localStorage.getItem('alder_phone');
@@ -943,37 +845,67 @@ function loadSettings(){
 
 // ── MEDIA UPLOAD ──
 const fileInput=document.getElementById('media-upload');
-let currentEditKey=null,currentModalKey=null;
+let currentUploadKey=null;
 
-document.querySelectorAll('.editable').forEach(el=>{
-  el.addEventListener('click',()=>{
-    if(!editMode)return;
-    currentEditKey=el.getAttribute('data-key');currentModalKey=null;
-    fileInput.accept='image/*,video/*';fileInput.click();
-  });
-});
+// Central function to trigger upload for any key
+function triggerUpload(key, acceptType){
+  currentUploadKey=key;
+  fileInput.accept=acceptType||'image/*,video/*';
+  // Small timeout so any prior events fully settle before opening file picker
+  setTimeout(()=>fileInput.click(), 50);
+}
+
+// Cam feed taps (Slide 3) — always available
+function uploadCamFeed(key){
+  triggerUpload(key,'image/*,video/*');
+}
+
+// Yard sign tap (Slide 4) — always available
+function uploadYardSign(){
+  triggerUpload('yard_sign','image/*');
+}
 
 fileInput.addEventListener('change',async(e)=>{
-  const file=e.target.files[0];if(!file)return;
-  const key=currentModalKey||currentEditKey;if(!key)return;
-  dbSet(key,file);renderMedia(key,file);
-  if(currentModalKey){updateModalPreview(file);}
-  fileInput.value='';currentEditKey=null;
+  const file=e.target.files[0];
+  if(!file||!currentUploadKey){fileInput.value='';return;}
+  const key=currentUploadKey;
+  currentUploadKey=null;
+  fileInput.value='';
+  dbSet(key,file);
+  renderMedia(key,file);
+  // If modal is open and matches, update preview too
+  if(modalOpen()&&document.getElementById('modal-title')){
+    updateModalPreview(file);
+  }
 });
 
 function renderMedia(key,fileBlob){
   const url=URL.createObjectURL(fileBlob);
+  const isVideo=fileBlob.type.startsWith('video/');
   const imgEl=document.getElementById('img-'+key);
   const vidEl=document.getElementById('vid-'+key);
-  if(imgEl&&!fileBlob.type.startsWith('video/')){imgEl.src=url;imgEl.style.background='transparent';}
+  if(imgEl){
+    if(!isVideo){
+      imgEl.src=url;
+      imgEl.style.background='transparent';
+      imgEl.style.display='block';
+    }
+  }
   if(vidEl){
-    if(fileBlob.type.startsWith('image/')){vidEl.poster=url;}
-    else{vidEl.src=url;vidEl.play().catch(()=>{});}
-    vidEl.style.background='transparent';
+    if(isVideo){
+      vidEl.src=url;
+      vidEl.style.background='transparent';
+      vidEl.style.display='block';
+      vidEl.play().catch(()=>{});
+    } else {
+      // Use image as poster on video element
+      vidEl.poster=url;
+      vidEl.style.background='transparent';
+    }
   }
 }
 
-// ── DEVICE MODAL ──
+// ── DEVICE MODAL (Slide 2) ──
 const deviceData={
   outdoor_cam:{title:'OUTDOOR CAM',res:'2K · HDR · NIGHT VISION · IP67',desc:'Crystal-clear 2K footage day and night. Recognize a face from 30 feet. Motion alerts hit your phone in under 3 seconds.',specs:['2K Resolution','Night Vision','IP67 Waterproof','Motion Alerts','Wide Angle','2-Way Audio']},
   indoor_cam:{title:'INDOOR CAM',res:'2K · 360° PAN/TILT · PRIVACY MODE',desc:'Full room coverage with 360° pan and tilt. Check in on your home from anywhere in the world.',specs:['2K Resolution','360° Pan/Tilt','2-Way Audio','Night Mode','Auto-Track','Privacy Mode']},
@@ -983,10 +915,11 @@ const deviceData={
   motion_sensor:{title:'MOTION DETECTOR',res:'40FT RANGE · PET-IMMUNE · 85LB',desc:"Detects motion up to 40 feet. Pet-immune up to 85 lbs — no false alarms from your dog.",specs:['40ft Range','Pet-Immune','85lb Limit','360° Option','Wireless','Instant Signal']}
 };
 
+let activeModalKey=null;
+
 function openDevice(key){
-  if(editMode)return;
   const d=deviceData[key];if(!d)return;
-  currentModalKey=key;
+  activeModalKey=key;
   document.getElementById('modal-title').textContent=d.title;
   document.getElementById('modal-res').textContent=d.res;
   document.getElementById('modal-desc').textContent=d.desc;
@@ -998,20 +931,43 @@ function openDevice(key){
   dbGet(key).then(blob=>{if(blob)updateModalPreview(blob);});
   document.getElementById('device-modal').classList.add('open');
 }
+
 function updateModalPreview(blob){
   const url=URL.createObjectURL(blob);
   const imgEl=document.getElementById('modal-img');
   const vidEl=document.getElementById('modal-vid');
   const hint=document.getElementById('modal-upload-hint');
-  if(blob.type.startsWith('video/')){vidEl.src=url;vidEl.style.display='block';imgEl.style.display='none';}
-  else{imgEl.src=url;imgEl.style.display='block';vidEl.style.display='none';}
+  if(blob.type.startsWith('video/')){
+    vidEl.src=url;vidEl.style.display='block';imgEl.style.display='none';
+  } else {
+    imgEl.src=url;imgEl.style.display='block';vidEl.style.display='none';
+  }
   hint.style.display='none';
 }
-document.getElementById('modal-close-btn').addEventListener('click',()=>{document.getElementById('device-modal').classList.remove('open');currentModalKey=null;});
-document.getElementById('device-modal').addEventListener('click',e=>{if(e.target===document.getElementById('device-modal')){document.getElementById('device-modal').classList.remove('open');currentModalKey=null;}});
-document.getElementById('modal-img-area').addEventListener('click',()=>{if(currentModalKey){fileInput.accept='image/*,video/*';fileInput.click();}});
-document.getElementById('modal-upload-btn').addEventListener('click',e=>{e.stopPropagation();if(currentModalKey){fileInput.accept='image/*';fileInput.click();}});
-document.getElementById('modal-upload-vid-btn').addEventListener('click',e=>{e.stopPropagation();if(currentModalKey){fileInput.accept='video/*';fileInput.click();}});
+
+function closeModal(){
+  document.getElementById('device-modal').classList.remove('open');
+  activeModalKey=null;
+}
+
+document.getElementById('modal-close-btn').addEventListener('click',closeModal);
+document.getElementById('device-modal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('device-modal'))closeModal();
+});
+
+// Modal upload buttons — these work any time the modal is open
+document.getElementById('modal-img-area').addEventListener('click',e=>{
+  e.stopPropagation();
+  if(activeModalKey){currentUploadKey=activeModalKey;triggerUpload(activeModalKey,'image/*,video/*');}
+});
+document.getElementById('modal-upload-btn').addEventListener('click',e=>{
+  e.stopPropagation();
+  if(activeModalKey){currentUploadKey=activeModalKey;triggerUpload(activeModalKey,'image/*');}
+});
+document.getElementById('modal-upload-vid-btn').addEventListener('click',e=>{
+  e.stopPropagation();
+  if(activeModalKey){currentUploadKey=activeModalKey;triggerUpload(activeModalKey,'video/*');}
+});
 
 // ── PHONE ARM/DISARM ──
 function toggleSystem(){
@@ -1081,9 +1037,7 @@ buildMap();
 
 // ── PACKAGES ──
 const pkgSavings=['Save $18/mo vs paying out-of-pocket after a break-in · ~$1.00/day','Most popular · Cameras + monitoring · Save $40/mo vs ADT equivalent','Full protection · Less than your cable bill · Save $60/mo vs competitors'];
-let selectedPkg=-1;
 function selectPkg(i){
-  selectedPkg=i;
   document.querySelectorAll('.pkg-card').forEach((c,idx)=>c.classList.toggle('selected',idx===i));
   document.getElementById('pkg-savings').textContent=pkgSavings[i];
 }
@@ -1095,7 +1049,7 @@ function toggleObj(el){
   if(!was)el.classList.add('open');
 }
 
-// ── INSURANCE CALC ──
+// ── INSURANCE CALC — slider touch events blocked from triggering swipe ──
 function updateInsCalc(){
   const slider=document.getElementById('ins-slider');
   const annual=parseInt(slider.value);
@@ -1109,13 +1063,21 @@ function updateInsCalc(){
   document.getElementById('ins-effective').textContent='$'+effective+'/mo';
   document.getElementById('ins-annual-save').textContent='$'+annualSave.toLocaleString();
 }
-document.getElementById('ins-slider').addEventListener('input',updateInsCalc);
+const insSlider=document.getElementById('ins-slider');
+insSlider.addEventListener('input',updateInsCalc);
+// Stop slider touch events from bubbling to the swipe detector
+insSlider.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
+insSlider.addEventListener('touchmove',e=>e.stopPropagation(),{passive:true});
+insSlider.addEventListener('touchend',e=>e.stopPropagation(),{passive:true});
 updateInsCalc();
 
 // ── ON LOAD ──
 window.addEventListener('DOMContentLoaded',async()=>{
   await initDB();
-  for(const key of ALL_MEDIA_KEYS){const b=await dbGet(key);if(b)renderMedia(key,b);}
+  for(const key of ALL_MEDIA_KEYS){
+    const b=await dbGet(key);
+    if(b)renderMedia(key,b);
+  }
   loadSettings();
 });
 </script>
