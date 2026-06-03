@@ -42,10 +42,6 @@ html,body{width:100%;height:100%;background:var(--dark);font-family:'Rajdhani',s
 #edit-btn{position:fixed;top:16px;right:16px;z-index:200;background:rgba(0,0,0,.6);border:1px solid var(--border);color:var(--text-dim);border-radius:50%;width:36px;height:36px;display:-webkit-flex;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all 0.2s;}
 #edit-btn.active{border-color:var(--amber);color:var(--amber);box-shadow:0 0 10px rgba(255,170,0,0.3);}
 
-/* EDIT MODE */
-body.edit-mode .editable{position:relative;cursor:pointer;}
-body.edit-mode .editable::after{content:'TAP TO CHANGE';position:absolute;inset:0;background:rgba(255,170,0,0.2);border:2px dashed var(--amber);color:var(--amber);display:-webkit-flex;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:11px;opacity:0;transition:opacity 0.2s;border-radius:inherit;z-index:20;}
-body.edit-mode .editable:hover::after,body.edit-mode .editable:active::after{opacity:1;}
 .media-slot{width:100%;height:100%;object-fit:contain;background:rgba(0,0,0,0.3);display:block;}
 .media-slot[src=""],.media-slot:not([src]){background:rgba(0,0,0,0.5);}
 video.media-slot:not([src]){background:rgba(0,0,0,0.5);}
@@ -276,17 +272,41 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 .rep-title{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--green);letter-spacing:1px;}
 .rep-phone{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);margin-top:3px;}
 
-/* SETTINGS PANEL */
-#settings-panel{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.9);backdrop-filter:blur(6px);display:-webkit-flex;display:flex;flex-direction:column;padding:40px 24px 30px;opacity:0;pointer-events:none;transition:opacity 0.3s;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+/* ── SETTINGS PANEL ── */
+#settings-panel{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.95);backdrop-filter:blur(8px);display:-webkit-flex;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.3s;overflow:hidden;}
 #settings-panel.open{opacity:1;pointer-events:all;}
+.settings-header{padding:44px 24px 0;flex-shrink:0;}
 .settings-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:#fff;margin-bottom:4px;}
-.settings-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:2px;margin-bottom:24px;}
+.settings-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:2px;margin-bottom:0;}
+/* Tab bar */
+.settings-tabs{display:flex;gap:0;margin:16px 24px 0;border-bottom:1px solid var(--border);flex-shrink:0;}
+.stab{flex:1;padding:10px 0;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:2px;text-align:center;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;}
+.stab.active{color:var(--green);border-bottom-color:var(--green);}
+/* Tab content */
+.settings-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 24px 100px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
 .settings-group{margin-bottom:20px;}
 .settings-group label{display:block;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:2px;margin-bottom:8px;}
 .settings-input{width:100%;background:rgba(0,255,136,0.04);border:1px solid var(--border);border-radius:6px;padding:10px 12px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:13px;outline:none;-webkit-appearance:none;appearance:none;}
 .settings-input:focus{border-color:var(--green);}
 .settings-save{width:100%;background:var(--green);color:#000;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;padding:12px;border-radius:4px;border:none;cursor:pointer;margin-top:8px;}
-.settings-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim);font-size:16px;cursor:pointer;display:-webkit-flex;display:flex;align-items:center;justify-content:center;}
+.settings-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim);font-size:16px;cursor:pointer;display:-webkit-flex;display:flex;align-items:center;justify-content:center;z-index:10;}
+
+/* ── PHOTO GRID in settings ── */
+.photo-section-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--amber);letter-spacing:3px;margin:18px 0 10px;text-transform:uppercase;}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+.photo-slot{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;background:#0b100d;border:1px solid var(--border);cursor:pointer;transition:border-color 0.2s;}
+.photo-slot:active{border-color:var(--green);}
+.photo-slot img,.photo-slot video{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-slot-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none;}
+.photo-slot-empty .ps-icon{font-size:22px;opacity:0.4;}
+.photo-slot-empty .ps-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);letter-spacing:1px;text-align:center;padding:0 4px;}
+.photo-slot.has-media .photo-slot-empty{display:none;}
+.photo-slot-check{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--green);display:none;align-items:center;justify-content:center;font-size:9px;color:#000;}
+.photo-slot.has-media .photo-slot-check{display:flex;}
+/* Wide 2-col slot */
+.photo-slot.wide{grid-column:span 2;}
 </style>
 </head>
 <body>
@@ -295,8 +315,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <div id="edit-btn">⚙️</div>
 <div id="tap-left"></div>
 <div id="tap-right"></div>
-<!-- Hidden file input — lives outside any modal so it's always accessible -->
-<input type="file" id="media-upload" accept="image/*,video/*" style="display:none;position:fixed;top:-1000px;">
+
+<!-- SINGLE hidden file input — always in DOM -->
+<input type="file" id="media-upload" accept="image/*,video/*" style="display:none;position:fixed;top:-9999px;left:-9999px;">
 
 <!-- DEVICE MODAL -->
 <div id="device-modal">
@@ -323,24 +344,105 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <!-- SETTINGS PANEL -->
 <div id="settings-panel">
   <div class="settings-close" id="settings-close-btn">✕</div>
-  <div class="settings-title">SETTINGS</div>
-  <div class="settings-sub">// CUSTOMIZE YOUR DECK //</div>
-  <div class="settings-group">
-    <label>YOUR NAME</label>
-    <input class="settings-input" id="set-name" type="text" placeholder="Your Full Name">
+  <div class="settings-header">
+    <div class="settings-title">SETTINGS</div>
+    <div class="settings-sub">// CUSTOMIZE YOUR DECK //</div>
   </div>
-  <div class="settings-group">
-    <label>YOUR PHONE</label>
-    <input class="settings-input" id="set-phone" type="tel" placeholder="(555) 000-0000">
+  <div class="settings-tabs">
+    <div class="stab active" data-tab="info">MY INFO</div>
+    <div class="stab" data-tab="photos">PHOTOS</div>
   </div>
-  <div class="settings-group">
-    <label>YOUR CITY / AREA</label>
-    <input class="settings-input" id="set-city" type="text" placeholder="e.g. Ridgeland, MS">
-  </div>
-  <div class="settings-group">
-    <label>PRODUCT PHOTOS — tap a device card on Slide 2 to add photos</label>
-  </div>
-  <button class="settings-save" id="settings-save-btn">SAVE &amp; CLOSE</button>
+  <div class="settings-body">
+
+    <!-- INFO TAB -->
+    <div class="tab-panel active" id="tab-info">
+      <div class="settings-group" style="margin-top:8px;">
+        <label>YOUR NAME</label>
+        <input class="settings-input" id="set-name" type="text" placeholder="Your Full Name">
+      </div>
+      <div class="settings-group">
+        <label>YOUR PHONE</label>
+        <input class="settings-input" id="set-phone" type="tel" placeholder="(555) 000-0000">
+      </div>
+      <div class="settings-group">
+        <label>YOUR CITY / AREA</label>
+        <input class="settings-input" id="set-city" type="text" placeholder="e.g. Ridgeland, MS">
+      </div>
+      <button class="settings-save" id="settings-save-btn">SAVE &amp; CLOSE</button>
+    </div>
+
+    <!-- PHOTOS TAB -->
+    <div class="tab-panel" id="tab-photos">
+
+      <div class="photo-section-label">📦 DEVICE PHOTOS</div>
+      <div class="photo-grid">
+        <div class="photo-slot" id="pslot-outdoor_cam" data-key="outdoor_cam" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">📷</div><div class="ps-label">OUTDOOR CAM</div></div>
+          <img id="pimg-outdoor_cam" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-indoor_cam" data-key="indoor_cam" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">📷</div><div class="ps-label">INDOOR CAM</div></div>
+          <img id="pimg-indoor_cam" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-doorbell_cam" data-key="doorbell_cam" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🔔</div><div class="ps-label">DOORBELL</div></div>
+          <img id="pimg-doorbell_cam" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-smart_hub" data-key="smart_hub" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🖥</div><div class="ps-label">SMART HUB</div></div>
+          <img id="pimg-smart_hub" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-door_sensor" data-key="door_sensor" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🚪</div><div class="ps-label">DOOR SENSOR</div></div>
+          <img id="pimg-door_sensor" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-motion_sensor" data-key="motion_sensor" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">👁</div><div class="ps-label">MOTION DET.</div></div>
+          <img id="pimg-motion_sensor" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+      </div>
+
+      <div class="photo-section-label">📹 CAMERA FEEDS (SLIDE 3)</div>
+      <div class="photo-grid">
+        <div class="photo-slot" id="pslot-cam_front" data-key="cam_front" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🏠</div><div class="ps-label">FRONT DOOR</div></div>
+          <img id="pimg-cam_front" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-cam_driveway" data-key="cam_driveway" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🚗</div><div class="ps-label">DRIVEWAY</div></div>
+          <img id="pimg-cam_driveway" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-cam_backyard" data-key="cam_backyard" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🌿</div><div class="ps-label">BACKYARD</div></div>
+          <img id="pimg-cam_backyard" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot" id="pslot-cam_garage" data-key="cam_garage" data-accept="image/*,video/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🏗</div><div class="ps-label">GARAGE</div></div>
+          <img id="pimg-cam_garage" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+        <div class="photo-slot wide" id="pslot-yard_sign" data-key="yard_sign" data-accept="image/*">
+          <div class="photo-slot-empty"><div class="ps-icon">🪧</div><div class="ps-label">YARD SIGN (SLIDE 4)</div></div>
+          <img id="pimg-yard_sign" src="" alt="" style="display:none;">
+          <div class="photo-slot-check">✓</div>
+        </div>
+      </div>
+
+      <p style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;margin-top:12px;line-height:1.6;">
+        TAP ANY SLOT TO UPLOAD · PHOTOS SAVE TO THIS DEVICE · GREEN CHECK = UPLOADED
+      </p>
+    </div>
+
+  </div><!-- /settings-body -->
 </div>
 
 <div id="slides">
@@ -392,8 +494,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
           <div class="img-wrapper"><img class="media-slot" id="img-door_sensor" src="" alt=" "></div>
         </div>
       </div>
-
-      <!-- CENTER COLUMN -->
       <div class="eco-center">
         <div class="eco-center-app">
           <div class="eco-title" style="font-size:9px;flex-shrink:0;">// SYSTEM CONTROL</div>
@@ -408,7 +508,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
           </div>
         </div>
       </div>
-
       <div class="eco-col-right">
         <div class="eco-card" onclick="openDevice('indoor_cam')">
           <div class="eco-title">Indoor Cam</div>
@@ -432,28 +531,28 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 <div class="slide" id="s3">
   <div class="s3-inner">
     <div class="cam-grid">
-      <div class="cam-feed" id="feed-cam_front" onclick="uploadCamFeed('cam_front')">
+      <div class="cam-feed" id="feed-cam_front">
         <video class="media-slot" id="vid-cam_front" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">FRONT DOOR</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
-      <div class="cam-feed" id="feed-cam_driveway" onclick="uploadCamFeed('cam_driveway')">
+      <div class="cam-feed" id="feed-cam_driveway">
         <video class="media-slot" id="vid-cam_driveway" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">DRIVEWAY</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
-      <div class="cam-feed" id="feed-cam_backyard" onclick="uploadCamFeed('cam_backyard')">
+      <div class="cam-feed" id="feed-cam_backyard">
         <video class="media-slot" id="vid-cam_backyard" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">BACKYARD</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
           <div class="cam-time ct1"></div>
         </div>
       </div>
-      <div class="cam-feed" id="feed-cam_garage" onclick="uploadCamFeed('cam_garage')">
+      <div class="cam-feed" id="feed-cam_garage">
         <video class="media-slot" id="vid-cam_garage" autoplay loop muted playsinline></video>
         <div class="cam-overlay">
           <div class="cam-top"><div class="cam-label">GARAGE</div><div style="display:flex;gap:4px;"><div class="cam-res">2K</div><div class="cam-live">● LIVE</div></div></div>
@@ -466,11 +565,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 
 <!-- S4: YARD SIGN -->
 <div class="slide" id="s4">
-  <div style="text-align:center;" onclick="uploadYardSign()">
+  <div style="text-align:center;">
     <div class="yard-sign-wrapper">
-      <img class="media-slot" id="img-yard_sign" src="" alt=" " style="filter:drop-shadow(0 0 40px rgba(0,255,136,0.15));border-radius:10px;cursor:pointer;">
+      <img class="media-slot" id="img-yard_sign" src="" alt=" " style="filter:drop-shadow(0 0 40px rgba(0,255,136,0.15));border-radius:10px;">
     </div>
-    <div class="sign-caption">Every home we protect gets a<br><span>visible deterrent</span> at the curb<br><span style="font-size:9px;opacity:0.5;">TAP IMAGE TO REPLACE</span></div>
+    <div class="sign-caption">Every home we protect gets a<br><span>visible deterrent</span> at the curb</div>
   </div>
 </div>
 
@@ -737,7 +836,6 @@ function dbGet(key){return new Promise(res=>{const tx=db.transaction("media","re
 
 // ── SLIDER ──
 let current=0;
-let editMode=false;
 
 function goTo(n){
   const slides=document.querySelectorAll('.slide');
@@ -759,30 +857,23 @@ document.getElementById('tap-left').addEventListener('click',prevSlide);
 document.getElementById('tap-right').addEventListener('click',nextSlide);
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
 
-// ── TOUCH / SWIPE — block when interacting with slider or interactive elements ──
-let touchStartX=0, touchStartY=0, touchIsSlider=false;
+// ── SWIPE ──
+let touchStartX=0, touchStartY=0, touchIsInteractive=false;
 document.addEventListener('touchstart',e=>{
   touchStartX=e.touches[0].clientX;
   touchStartY=e.touches[0].clientY;
-  // Mark if touch started on a range input or interactive element
   const tgt=e.target;
-  touchIsSlider=(tgt.tagName==='INPUT'&&tgt.type==='range')||
-    tgt.closest('.obj-item')||
-    tgt.closest('.pkg-card')||
-    tgt.closest('.testi-nav')||
-    tgt.closest('#nav')||
-    tgt.closest('.modal-card')||
-    tgt.closest('#settings-panel');
+  touchIsInteractive=(tgt.tagName==='INPUT'&&tgt.type==='range')||
+    tgt.closest('.obj-item')||tgt.closest('.pkg-card')||
+    tgt.closest('.testi-nav')||tgt.closest('#nav')||
+    tgt.closest('.modal-card')||tgt.closest('#settings-panel');
 },{passive:true});
-
 document.addEventListener('touchend',e=>{
-  if(modalOpen()||settingsOpen()||touchIsSlider)return;
+  if(modalOpen()||settingsOpen()||touchIsInteractive)return;
   const dx=e.changedTouches[0].clientX-touchStartX;
   const dy=Math.abs(e.changedTouches[0].clientY-touchStartY);
-  // Only swipe if horizontal motion dominates
   if(Math.abs(dx)>50&&dy<60){dx<0?nextSlide():prevSlide();}
 },{passive:true});
-
 document.getElementById('tap-right').addEventListener('click',()=>{document.getElementById('tap-hint').style.opacity='0';},{once:true});
 
 // ── CLOCK ──
@@ -794,46 +885,48 @@ function updateClock(){
 }
 setInterval(updateClock,1000);updateClock();
 
-// ── EDIT MODE ──
+// ── SETTINGS PANEL ──
 document.getElementById('edit-btn').addEventListener('click',()=>{
-  if(settingsOpen()){
-    document.getElementById('settings-panel').classList.remove('open');
-    editMode=false;
-    document.body.classList.remove('edit-mode');
-    document.getElementById('edit-btn').classList.remove('active');
-    return;
-  }
-  editMode=!editMode;
+  const panel=document.getElementById('settings-panel');
   const btn=document.getElementById('edit-btn');
-  if(editMode){
-    document.body.classList.add('edit-mode');btn.classList.add('active');
-    document.getElementById('settings-panel').classList.add('open');
+  if(panel.classList.contains('open')){
+    panel.classList.remove('open');
+    btn.classList.remove('active');
   } else {
-    document.body.classList.remove('edit-mode');btn.classList.remove('active');
-    document.getElementById('settings-panel').classList.remove('open');
+    panel.classList.add('open');
+    btn.classList.add('active');
   }
 });
-
-// ── SETTINGS ──
 document.getElementById('settings-close-btn').addEventListener('click',closeSettings);
+
+// ── SETTINGS TABS ──
+document.querySelectorAll('.stab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
+  });
+});
+
 document.getElementById('settings-save-btn').addEventListener('click',()=>{
   const name=document.getElementById('set-name').value.trim()||'YOUR REP';
   const phone=document.getElementById('set-phone').value.trim()||'—';
   const city=document.getElementById('set-city').value.trim();
   document.getElementById('rep-name-display').textContent=name.toUpperCase();
   document.getElementById('rep-phone-display').textContent=phone;
-  if(city){document.getElementById('crime-city-label').textContent='IN '+city.toUpperCase();}
+  if(city)document.getElementById('crime-city-label').textContent='IN '+city.toUpperCase();
   localStorage.setItem('alder_name',name);
   localStorage.setItem('alder_phone',phone);
   localStorage.setItem('alder_city',city);
   closeSettings();
 });
+
 function closeSettings(){
   document.getElementById('settings-panel').classList.remove('open');
-  editMode=false;
-  document.body.classList.remove('edit-mode');
   document.getElementById('edit-btn').classList.remove('active');
 }
+
 function loadSettings(){
   const name=localStorage.getItem('alder_name');
   const phone=localStorage.getItem('alder_phone');
@@ -843,69 +936,76 @@ function loadSettings(){
   if(city){document.getElementById('set-city').value=city;document.getElementById('crime-city-label').textContent='IN '+city.toUpperCase();}
 }
 
-// ── MEDIA UPLOAD ──
+// ── UNIFIED MEDIA UPLOAD ENGINE ──
 const fileInput=document.getElementById('media-upload');
-let currentUploadKey=null;
+let pendingKey=null;
+let pendingCallback=null;
 
-// Central function to trigger upload for any key
-function triggerUpload(key, acceptType){
-  currentUploadKey=key;
-  fileInput.accept=acceptType||'image/*,video/*';
-  // Small timeout so any prior events fully settle before opening file picker
-  setTimeout(()=>fileInput.click(), 50);
-}
-
-// Cam feed taps (Slide 3) — always available
-function uploadCamFeed(key){
-  triggerUpload(key,'image/*,video/*');
-}
-
-// Yard sign tap (Slide 4) — always available
-function uploadYardSign(){
-  triggerUpload('yard_sign','image/*');
-}
-
-fileInput.addEventListener('change',async(e)=>{
-  const file=e.target.files[0];
-  if(!file||!currentUploadKey){fileInput.value='';return;}
-  const key=currentUploadKey;
-  currentUploadKey=null;
+function triggerUpload(key,accept,callback){
+  pendingKey=key;
+  pendingCallback=callback||null;
+  fileInput.accept=accept||'image/*,video/*';
+  // Detach and re-attach to clear stale state (critical on iOS)
   fileInput.value='';
+  setTimeout(()=>fileInput.click(),80);
+}
+
+fileInput.addEventListener('change',async function(){
+  const file=this.files[0];
+  const key=pendingKey;
+  const cb=pendingCallback;
+  // Reset immediately
+  pendingKey=null;
+  pendingCallback=null;
+  this.value='';
+  if(!file||!key)return;
+  // Save to DB
   dbSet(key,file);
+  // Render everywhere this key appears
   renderMedia(key,file);
-  // If modal is open and matches, update preview too
-  if(modalOpen()&&document.getElementById('modal-title')){
-    updateModalPreview(file);
-  }
+  // Run optional callback (e.g. modal preview update)
+  if(cb)cb(file);
 });
 
 function renderMedia(key,fileBlob){
   const url=URL.createObjectURL(fileBlob);
   const isVideo=fileBlob.type.startsWith('video/');
+
+  // ── Slide 2 device cards ──
   const imgEl=document.getElementById('img-'+key);
+  if(imgEl&&!isVideo){imgEl.src=url;imgEl.style.background='transparent';imgEl.style.display='block';}
+
+  // ── Slide 3 cam feeds ──
   const vidEl=document.getElementById('vid-'+key);
-  if(imgEl){
-    if(!isVideo){
-      imgEl.src=url;
-      imgEl.style.background='transparent';
-      imgEl.style.display='block';
-    }
-  }
   if(vidEl){
-    if(isVideo){
-      vidEl.src=url;
-      vidEl.style.background='transparent';
-      vidEl.style.display='block';
-      vidEl.play().catch(()=>{});
-    } else {
-      // Use image as poster on video element
-      vidEl.poster=url;
-      vidEl.style.background='transparent';
-    }
+    if(isVideo){vidEl.src=url;vidEl.style.background='transparent';vidEl.style.display='block';vidEl.play().catch(()=>{});}
+    else{vidEl.poster=url;vidEl.style.background='transparent';}
+  }
+
+  // ── Slide 4 yard sign ──
+  if(key==='yard_sign'&&imgEl){imgEl.src=url;imgEl.style.background='transparent';imgEl.style.display='block';}
+
+  // ── Settings photo grid thumbnails ──
+  const pimg=document.getElementById('pimg-'+key);
+  const pslot=document.getElementById('pslot-'+key);
+  if(pimg&&pslot){
+    pimg.src=url;pimg.style.display='block';
+    pslot.classList.add('has-media');
   }
 }
 
-// ── DEVICE MODAL (Slide 2) ──
+// ── SETTINGS PHOTO GRID — wire up all slots ──
+document.querySelectorAll('.photo-slot').forEach(slot=>{
+  slot.addEventListener('click',function(e){
+    e.stopPropagation();
+    const key=this.dataset.key;
+    const accept=this.dataset.accept||'image/*,video/*';
+    if(!key)return;
+    triggerUpload(key,accept);
+  });
+});
+
+// ── DEVICE MODAL (Slide 2 cards) ──
 const deviceData={
   outdoor_cam:{title:'OUTDOOR CAM',res:'2K · HDR · NIGHT VISION · IP67',desc:'Crystal-clear 2K footage day and night. Recognize a face from 30 feet. Motion alerts hit your phone in under 3 seconds.',specs:['2K Resolution','Night Vision','IP67 Waterproof','Motion Alerts','Wide Angle','2-Way Audio']},
   indoor_cam:{title:'INDOOR CAM',res:'2K · 360° PAN/TILT · PRIVACY MODE',desc:'Full room coverage with 360° pan and tilt. Check in on your home from anywhere in the world.',specs:['2K Resolution','360° Pan/Tilt','2-Way Audio','Night Mode','Auto-Track','Privacy Mode']},
@@ -955,18 +1055,24 @@ document.getElementById('device-modal').addEventListener('click',e=>{
   if(e.target===document.getElementById('device-modal'))closeModal();
 });
 
-// Modal upload buttons — these work any time the modal is open
+// Modal image area tap
 document.getElementById('modal-img-area').addEventListener('click',e=>{
   e.stopPropagation();
-  if(activeModalKey){currentUploadKey=activeModalKey;triggerUpload(activeModalKey,'image/*,video/*');}
+  if(activeModalKey){
+    triggerUpload(activeModalKey,'image/*,video/*',function(file){updateModalPreview(file);});
+  }
 });
 document.getElementById('modal-upload-btn').addEventListener('click',e=>{
   e.stopPropagation();
-  if(activeModalKey){currentUploadKey=activeModalKey;triggerUpload(activeModalKey,'image/*');}
+  if(activeModalKey){
+    triggerUpload(activeModalKey,'image/*',function(file){updateModalPreview(file);});
+  }
 });
 document.getElementById('modal-upload-vid-btn').addEventListener('click',e=>{
   e.stopPropagation();
-  if(activeModalKey){currentUploadKey=activeModalKey;triggerUpload(activeModalKey,'video/*');}
+  if(activeModalKey){
+    triggerUpload(activeModalKey,'video/*',function(file){updateModalPreview(file);});
+  }
 });
 
 // ── PHONE ARM/DISARM ──
@@ -994,8 +1100,7 @@ function buildTestiNav(){
   testis.forEach((_,i)=>{const d=document.createElement('div');d.className='testi-dot'+(i===0?' active':'');d.onclick=()=>showTesti(i);nav.appendChild(d);});
 }
 function showTesti(i){
-  testiIdx=i;
-  const t=testis[i];
+  testiIdx=i;const t=testis[i];
   document.getElementById('testi-q').textContent=t.q;
   document.getElementById('testi-name').textContent=t.name;
   document.getElementById('testi-city').textContent=t.city;
@@ -1008,27 +1113,19 @@ buildTestiNav();
 // ── MAP ──
 function buildMap(){
   const inner=document.getElementById('map-inner');
-  const streets=[
-    {style:'left:0;right:0;top:30%;height:14%'},
-    {style:'left:0;right:0;top:60%;height:10%'},
-    {style:'left:20%;top:0;bottom:0;width:12%'},
-    {style:'left:65%;top:0;bottom:0;width:10%'},
-  ];
-  streets.forEach(s=>{const el=document.createElement('div');el.className='map-street';el.style.cssText=s.style;inner.appendChild(el);});
+  [['left:0;right:0;top:30%;height:14%'],['left:0;right:0;top:60%;height:10%'],['left:20%;top:0;bottom:0;width:12%'],['left:65%;top:0;bottom:0;width:10%']].forEach(([s])=>{
+    const el=document.createElement('div');el.className='map-street';el.style.cssText=s;inner.appendChild(el);
+  });
   [['12%','23%','OAK ST'],['12%','53%','MAPLE AVE'],['3%','12%','ELM DR']].forEach(([l,t,txt])=>{
     const el=document.createElement('div');el.className='map-label';el.style.left=l;el.style.top=t;el.textContent=txt;inner.appendChild(el);
   });
-  const pins=[['18%','18%'],['14%','65%'],['70%','20%'],['72%','68%']];
-  pins.forEach(([l,t])=>{
+  [['18%','18%'],['14%','65%'],['70%','20%'],['72%','68%']].forEach(([l,t])=>{
     const el=document.createElement('div');el.className='map-pin';el.style.left=l;el.style.top=t;
-    el.innerHTML='<div class="pin-shield">🛡</div><div class="pin-label">PROTECTED</div>';
-    inner.appendChild(el);
+    el.innerHTML='<div class="pin-shield">🛡</div><div class="pin-label">PROTECTED</div>';inner.appendChild(el);
   });
   const you=document.createElement('div');you.className='map-pin';you.style.left='44%';you.style.top='44%';
-  you.innerHTML='<div class="pin-shield you">🏠</div><div class="pin-label you-label">YOU</div>';
-  inner.appendChild(you);
-  const unp=[['40%','18%'],['40%','68%'],['78%','44%']];
-  unp.forEach(([l,t])=>{
+  you.innerHTML='<div class="pin-shield you">🏠</div><div class="pin-label you-label">YOU</div>';inner.appendChild(you);
+  [['40%','18%'],['40%','68%'],['78%','44%']].forEach(([l,t])=>{
     const el=document.createElement('div');el.className='map-unprotected';el.style.left=l;el.style.top=t;
     el.textContent='?';inner.appendChild(el);
   });
@@ -1049,14 +1146,12 @@ function toggleObj(el){
   if(!was)el.classList.add('open');
 }
 
-// ── INSURANCE CALC — slider touch events blocked from triggering swipe ──
+// ── INSURANCE CALC ──
 function updateInsCalc(){
   const slider=document.getElementById('ins-slider');
   const annual=parseInt(slider.value);
   const discount=Math.round(annual*0.15/12);
-  const monthly=49;
-  const effective=monthly-discount;
-  const annualSave=discount*12;
+  const monthly=49,effective=monthly-discount,annualSave=discount*12;
   document.getElementById('ins-slider-val').textContent='$'+annual.toLocaleString()+'/yr';
   document.getElementById('ins-monthly').textContent='$'+monthly+'/mo';
   document.getElementById('ins-discount').textContent='-$'+discount+'/mo';
@@ -1065,10 +1160,7 @@ function updateInsCalc(){
 }
 const insSlider=document.getElementById('ins-slider');
 insSlider.addEventListener('input',updateInsCalc);
-// Stop slider touch events from bubbling to the swipe detector
-insSlider.addEventListener('touchstart',e=>e.stopPropagation(),{passive:true});
-insSlider.addEventListener('touchmove',e=>e.stopPropagation(),{passive:true});
-insSlider.addEventListener('touchend',e=>e.stopPropagation(),{passive:true});
+['touchstart','touchmove','touchend'].forEach(ev=>insSlider.addEventListener(ev,e=>e.stopPropagation(),{passive:true}));
 updateInsCalc();
 
 // ── ON LOAD ──
